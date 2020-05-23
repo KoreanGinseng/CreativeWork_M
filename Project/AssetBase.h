@@ -37,15 +37,13 @@ namespace sip
 		/// </summary>
 		/// <param name="key">検索用キー</param>
 		/// <param name="fileName">ファイル名</param>
-		/// <returns>登録が成功すれば true それ以外 false </returns>
+		/// <returns>登録が成功すれば true それ以外 false</returns>
 		/// <created>いのうえ,2020/04/26</created>
-		/// <changed>いのうえ,2020/04/26</changed>
+		/// <changed>いのうえ,2020/05/22</changed>
 		// ********************************************************************************
 		static bool Load(const std::string& key, const std::string& fileName)
 		{
-			//if (GetAsset(key) == std::shared_ptr<T>())
-			// (GetAsset(key) == empty)
-			if (!GetAsset(key))
+			if (GetAssetMap().m_AssetMap.find(key) == GetAssetMap().m_AssetMap.end())
 			{
 				GetAssetMap().m_AssetMap[key] = std::make_shared<T>();
 			}
@@ -83,14 +81,25 @@ namespace sip
 		}
 	};
 
+	// アセットベースクラスに対応するようにしたフォントクラス
+	class CFontA : public CFont
+	{
+	public:
+		CFontA(void) : CFont() {}
+		~CFontA(void) {}
+		bool Load(LPCMofChar pName) { return CFont::Create(24, pName); }
+	};
+
 	//アセットの置き換え( bool Load() 関数 と Release() 関数が実装されていれば利用可能)
 	typedef CAssetBase<CSoundBuffer>   CSoundAsset;
 	typedef CAssetBase<CTexture>       CTextureAsset;
 	typedef CAssetBase<CMeshContainer> CMeshAsset;
+	typedef CAssetBase<CFontA>         CFontAsset;
 
 	#define SoundAsset(key)            CSoundAsset::GetAsset(key)
 	#define TextureAsset(key)          CTextureAsset::GetAsset(key)
 	#define MeshAsset(key)             CMeshAsset::GetAsset(key)
+	#define FontAsset(key)             CFontAsset::GetAsset(key)
 }
 
 using namespace sip;
