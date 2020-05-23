@@ -95,12 +95,24 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="Load.cpp" />
+    <ClCompile Include="LoadBase.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetBase.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="Load.h" />
+    <ClInclude Include="LoadBase.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="StopWatch.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />

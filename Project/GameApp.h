@@ -11,6 +11,9 @@
 
 //INCLUDE
 #include	"Mof.h"
+#include    "Title.h"
+#include    "Game.h"
+#include    "Load.h"
 
 /*******************************//*!
 @brief	基本ゲームアプリ。
@@ -18,6 +21,10 @@
 @author	濱田　享
 *//********************************/
 class CGameApp : public CSingleGameApplication {
+private:
+
+	MyApp       m_SceneManager;
+
 public:
 	/*************************************************************************//*!
 			@brief			コンストラクタ
