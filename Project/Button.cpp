@@ -14,10 +14,53 @@ CButton::~CButton(void)
 
 void CButton::Initialize(const Vector2 & pos, const Vector2 & size, const std::string & str, const std::shared_ptr<CFontA>& pFont)
 {
+	SetPos(pos);
+	SetSize(size);
+	SetString(str);
+	SetFont(pFont);
 }
 
 void CButton::Render(void) const
 {
+	CRectangle baseRect  = GetRect();
+	CRectangle backRectW = baseRect;
+	CRectangle backRectH = baseRect;
+
+	backRectW.Expansion(3, 0);
+	backRectH.Expansion(0, 3);
+
+	// ボタンの影。
+	if (!IsClickL())
+	{
+		CGraphicsUtilities::RenderFillRect(baseRect , MOF_COLOR_HBLACK);
+		CGraphicsUtilities::RenderFillRect(backRectW, MOF_COLOR_HBLACK);
+		CGraphicsUtilities::RenderFillRect(backRectH, MOF_COLOR_HBLACK);
+
+		baseRect. Translation(Vector2(0, -3));
+		backRectW.Translation(Vector2(0, -3));
+		backRectH.Translation(Vector2(0, -3));
+	}
+
+	// ボタン本体。
+	CGraphicsUtilities::RenderFillRect(baseRect , MOF_COLOR_CWHITE);
+	CGraphicsUtilities::RenderFillRect(backRectW, MOF_COLOR_CWHITE);
+	CGraphicsUtilities::RenderFillRect(backRectH, MOF_COLOR_CWHITE);
+
+	// フォントが登録されていない場合、文字の描画はしない。
+	if (!m_pFont)
+	{
+		return;
+	}
+
+	// 文字の描画。
+	CRectangle textRect;
+	m_pFont->CalculateStringRect(0, 0, m_String.c_str(), textRect);
+	m_pFont->RenderString(
+		baseRect.GetCenter().x - textRect.GetWidth()  * 0.5f,
+		baseRect.GetCenter().y - textRect.GetHeight() * 0.5f,
+		MOF_COLOR_BLACK, m_String.c_str()
+	);
+
 }
 
 void CButton::SetPos(const Vector2 & pos)
