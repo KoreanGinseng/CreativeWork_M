@@ -13,6 +13,10 @@ CGame::CGame(const CGame::InitData & init) :
 	m_BtnWindowSize[WindowSize::LARGE ].Initialize(Vector2( 10, 8), Vector2(50, 18), "大", m_pBtnFont);
 	m_BtnWindowSize[WindowSize::MEDIUM].Initialize(Vector2( 70, 8), Vector2(50, 18), "中", m_pBtnFont);
 	m_BtnWindowSize[WindowSize::SMALL ].Initialize(Vector2(130, 8), Vector2(50, 18), "小", m_pBtnFont);
+
+	// 最前面にするボタンの初期化。
+	m_BtnAppForward.Initialize(Vector2(210, 8), Vector2(50, 18), "最前面", m_pBtnFont);
+	m_bForward = false;
 }
 
 CGame::~CGame(void)
@@ -41,6 +45,14 @@ void CGame::Update(void)
 			break;
 		}
 	}
+
+	// ウィンドウ最前面の処理。
+	if (m_BtnAppForward.IsClickL())
+	{
+		m_bForward = !m_bForward;
+		m_BtnAppForward.SetString(m_bForward ? "解除" : "最前面");
+		CWindowUtillities::SetForeGround(m_bForward);
+	}
 }
 
 void CGame::Render(void) const
@@ -50,4 +62,7 @@ void CGame::Render(void) const
 	{
 		m_BtnWindowSize[i].Render();
 	}
+
+	// 最前面設定ボタンの描画。
+	m_BtnAppForward.Render();
 }
