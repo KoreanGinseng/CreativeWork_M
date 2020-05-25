@@ -24,5 +24,24 @@ struct GameData {
 
 };
 
+// ウィンドウサイズ
+enum WindowSize {
+
+	LARGE,
+
+	MEDIUM,
+
+	SMALL,
+
+	WINDOWSIZE_CONT
+};
+
+constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
+{
+	{ 800, 600 },
+	{ 400, 300 },
+	{ 200, 150 },
+};
+
 
 using MyApp = CSceneManager<SceneName, GameData>;
