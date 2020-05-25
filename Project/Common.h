@@ -18,6 +18,10 @@ enum class SceneName
 // 各シーン共通のデータ
 struct GameData {
 
+	int windowWidth;
+
+	int windowHeight;
+
 };
 
 
