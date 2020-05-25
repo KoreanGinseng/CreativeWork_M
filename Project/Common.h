@@ -15,17 +15,8 @@ enum class SceneName
 
 };
 
-// 各シーン共通のデータ
-struct GameData {
-
-	int windowWidth;
-
-	int windowHeight;
-
-};
-
 // ウィンドウサイズ
-enum WindowSize {
+enum WINDOWSIZE {
 
 	LARGE,
 
@@ -34,6 +25,13 @@ enum WindowSize {
 	SMALL,
 
 	WINDOWSIZE_CONT
+};
+
+// 各シーン共通のデータ
+struct GameData {
+
+	WINDOWSIZE    windowSize;
+
 };
 
 constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
