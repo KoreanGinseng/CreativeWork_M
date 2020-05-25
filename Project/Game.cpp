@@ -17,6 +17,9 @@ CGame::CGame(const CGame::InitData & init) :
 	// 最前面にするボタンの初期化。
 	m_BtnAppForward.Initialize(Vector2(210, 8), Vector2(50, 18), "最前面", m_pBtnFont);
 	m_bForward = false;
+
+	// タイトルへ行くボタンの初期化。
+	m_BtnGoTitle.Initialize(Vector2(290, 8), Vector2(70, 18), "タイトルへ", m_pBtnFont);
 }
 
 CGame::~CGame(void)
@@ -26,8 +29,8 @@ CGame::~CGame(void)
 
 void CGame::Update(void)
 {
-	// DEBUG
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	// タイトルへ行くボタンが押されたらタイトルへ行こうね。
+	if (m_BtnGoTitle.IsClickL())
 	{
 		ChangeScene(SceneName::Title);
 	}
@@ -65,4 +68,7 @@ void CGame::Render(void) const
 
 	// 最前面設定ボタンの描画。
 	m_BtnAppForward.Render();
+
+	// タイトルへ行くボタンの描画。
+	m_BtnGoTitle.Render();
 }

@@ -15,6 +15,8 @@ private:
 
 	bool                     m_bForward;
 
+	CButton                  m_BtnGoTitle;
+
 public:
 	
 	explicit CGame(const CGame::InitData& init);
