@@ -15,7 +15,10 @@ namespace LoadFunc
 	// 起動時に読み込みを行う関数。
 	bool StartLoad(void)
 	{
-
+		if (!CFontAsset::Load("Button", "游ゴシック"))
+		{
+			return false;
+		}
 		return true;
 	}
 }
