@@ -102,6 +102,7 @@
     <ClCompile Include="LoadBase.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="WindowUtillities.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +116,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="WindowUtillities.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />
