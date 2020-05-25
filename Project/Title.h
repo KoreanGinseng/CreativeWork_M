@@ -1,9 +1,14 @@
 #pragma once
 #include "Common.h"
+#include "Button.h"
 
 class CTitle : public MyApp::CScene
 {
 private:
+
+	std::shared_ptr<CFontA> m_pBtnFont;
+
+	CButton                 m_BtnGameStart;
 
 public:
 	
