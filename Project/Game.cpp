@@ -10,9 +10,9 @@ CGame::CGame(const CGame::InitData & init) :
 	m_pBtnFont->SetSize(16);
 
 	// ウィンドウサイズ変更のボタンの初期化。
-	m_BtnWindowSize[WindowSize::LARGE ].Initialize(Vector2( 10, 8), Vector2(50, 18), "大", m_pBtnFont);
-	m_BtnWindowSize[WindowSize::MEDIUM].Initialize(Vector2( 70, 8), Vector2(50, 18), "中", m_pBtnFont);
-	m_BtnWindowSize[WindowSize::SMALL ].Initialize(Vector2(130, 8), Vector2(50, 18), "小", m_pBtnFont);
+	m_BtnWindowSize[WINDOWSIZE::LARGE ].Initialize(Vector2( 10, 8), Vector2(50, 18), "大", m_pBtnFont);
+	m_BtnWindowSize[WINDOWSIZE::MEDIUM].Initialize(Vector2( 70, 8), Vector2(50, 18), "中", m_pBtnFont);
+	m_BtnWindowSize[WINDOWSIZE::SMALL ].Initialize(Vector2(130, 8), Vector2(50, 18), "小", m_pBtnFont);
 
 	// 最前面にするボタンの初期化。
 	m_BtnAppForward.Initialize(Vector2(210, 8), Vector2(50, 18), "最前面", m_pBtnFont);
@@ -20,6 +20,12 @@ CGame::CGame(const CGame::InitData & init) :
 
 	// タイトルへ行くボタンの初期化。
 	m_BtnGoTitle.Initialize(Vector2(290, 8), Vector2(70, 18), "タイトルへ", m_pBtnFont);
+
+	// ゲームデータからウィンドウのサイズを変更する。
+	g_pGraphics->SetScreenSize(
+		WindowSize[GetData().windowSize].first,
+		WindowSize[GetData().windowSize].second
+	);
 }
 
 CGame::~CGame(void)
@@ -33,9 +39,15 @@ void CGame::Update(void)
 	if (m_BtnGoTitle.IsClickL())
 	{
 		ChangeScene(SceneName::Title);
+
+		// 画面サイズを戻しておく。
+		g_pGraphics->SetScreenSize(
+			WindowSize[WINDOWSIZE::LARGE].first,
+			WindowSize[WINDOWSIZE::LARGE].second
+		);
 	}
 
-	for (int i = 0; i < WindowSize::WINDOWSIZE_CONT; i++)
+	for (int i = 0; i < WINDOWSIZE::WINDOWSIZE_CONT; i++)
 	{
 		// 押されたボタンによってウィンドウのサイズを変更する。
 		if (m_BtnWindowSize[i].IsClickL())
@@ -43,8 +55,7 @@ void CGame::Update(void)
 			g_pGraphics->SetScreenSize(WindowSize[i].first, WindowSize[i].second);
 
 			// 変更されたサイズを記憶,更新する。
-			GetData().windowWidth  = WindowSize[i].first;
-			GetData().windowHeight = WindowSize[i].second;
+			GetData().windowSize = static_cast<WINDOWSIZE>(i);
 			break;
 		}
 	}
@@ -61,7 +72,7 @@ void CGame::Update(void)
 void CGame::Render(void) const
 {
 	// ウィンドウサイズ変更ボタンの描画。
-	for (int i = 0; i < WindowSize::WINDOWSIZE_CONT; i++)
+	for (int i = 0; i < WINDOWSIZE::WINDOWSIZE_CONT; i++)
 	{
 		m_BtnWindowSize[i].Render();
 	}
