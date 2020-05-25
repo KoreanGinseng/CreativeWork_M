@@ -19,6 +19,8 @@ void CWindowUtillities::ToggleTitleBarEnable(void)
 
 	SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
 		(SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED));
+
+	g_pGraphics->SetBackBufferSize(g_pGraphics->GetTargetWidth(), g_pGraphics->GetTargetHeight());
 }
 
 void CWindowUtillities::SetForeGround(const bool & b)
