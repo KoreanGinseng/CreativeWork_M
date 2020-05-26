@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "AssetBase.h"
+#include "EaseMotionController.h"
 
 using namespace sip;
 
