@@ -42,5 +42,12 @@ constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
 	{ 200, 150 },
 };
 
+constexpr float WindowScale[WINDOWSIZE_CONT] =
+{
+	1.0f,
+	0.5f,
+	0.25f,
+};
+
 
 using MyApp = CSceneManager<SceneName, GameData>;
