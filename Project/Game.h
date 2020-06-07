@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Button.h"
 #include "WindowUtillities.h"
+#include "Player.h"
 
 class CGame : public MyApp::CScene
 {
@@ -16,6 +17,8 @@ private:
 	bool                     m_bForward;
 
 	CButton                  m_BtnGoTitle;
+
+	CPlayer                  m_Player;
 
 public:
 	

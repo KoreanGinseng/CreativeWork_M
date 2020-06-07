@@ -26,6 +26,10 @@ CGame::CGame(const CGame::InitData & init) :
 		WindowSize[GetData().windowSize].first,
 		WindowSize[GetData().windowSize].second
 	);
+
+	// プレイヤーの画像セット。
+	m_Player.SetTexture(TextureAsset("baby_boy"));
+	m_Player.SetPos(Vector2(100, 300));
 }
 
 CGame::~CGame(void)
@@ -71,6 +75,16 @@ void CGame::Update(void)
 
 void CGame::Render(void) const
 {
+	float scale = WindowScale[CWindowUtillities::GetWindowSize()];
+	CGraphicsUtilities::RenderFillRect(
+		0, 0,
+		400 * scale, 300 * scale,
+		MOF_COLOR_RED,
+		MOF_COLOR_RED,
+		MOF_COLOR_RED,
+		MOF_COLOR_RED
+	);
+
 	// ウィンドウサイズ変更ボタンの描画。
 	for (int i = 0; i < WINDOWSIZE::WINDOWSIZE_CONT; i++)
 	{
@@ -82,4 +96,8 @@ void CGame::Render(void) const
 
 	// タイトルへ行くボタンの描画。
 	m_BtnGoTitle.Render();
+
+	// プレイヤーの描画。
+	m_Player.Render();
+
 }
