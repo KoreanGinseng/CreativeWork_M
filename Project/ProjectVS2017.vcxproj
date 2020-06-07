@@ -102,6 +102,7 @@
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="LoadBase.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="WindowUtillities.cpp" />
@@ -117,8 +118,11 @@
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="GuideDefine.h" />
+    <ClInclude Include="ImageResourceDefine.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="LoadBase.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Title.h" />
