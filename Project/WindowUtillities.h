@@ -1,5 +1,6 @@
 #pragma once
 #include "Mof.h"
+#include "Common.h"
 
 class CWindowUtillities
 {
@@ -12,6 +13,8 @@ public:
 	static void ToggleTitleBarEnable(void);
 
 	static void SetForeGround(const bool& b);
+
+	static WINDOWSIZE GetWindowSize(void);
 
 };
 
