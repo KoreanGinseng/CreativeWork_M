@@ -23,7 +23,7 @@ public:
 
 	virtual void Update(void) = 0;
 
-	virtual void Render(void) = 0;
+	virtual void Render(void) const = 0;
 
 	virtual void Release(void) = 0;
 
