@@ -37,7 +37,7 @@ struct GameData {
 
 constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
 {
-	{ 800, 600 },
+	{ 600, 450 },
 	{ 400, 300 },
 	{ 200, 150 },
 };
@@ -45,8 +45,8 @@ constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
 constexpr float WindowScale[WINDOWSIZE_CONT] =
 {
 	1.0f,
+	1.0f,
 	0.5f,
-	0.25f,
 };
 
 
