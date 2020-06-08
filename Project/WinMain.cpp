@@ -9,8 +9,8 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
 
 	Info.WindowCreateInfo.Title  = "M";
 
-	Info.WindowCreateInfo.Width  = 800;
-	Info.WindowCreateInfo.Height = 600;
+	Info.WindowCreateInfo.Width  = 600;
+	Info.WindowCreateInfo.Height = 450;
 
 	Info.GraphicsCreateInfo.bMSAA = FALSE;
 
