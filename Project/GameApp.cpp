@@ -9,32 +9,68 @@
 
 //INCLUDE
 #include	"GameApp.h"
-#include    "ImageResourceDefine.h"
+#include    "MIDIInput.h"
+#include    "picojson.h"
 
-namespace LoadFunc
+CDynamicArray<MusicData> g_MusicData;
+
+// 起動時に読み込みを行う関数。
+bool StartLoad(void)
 {
-	// 起動時に読み込みを行う関数。
-	bool StartLoad(void)
+	MOF_PRINTLOG("midi device count : %d\n", g_MIDIInput.GetDeviceCount());
+
+	// JSONデータの読み込み。
+	std::ifstream ifs("music_list.json", std::ios::in);
+	if (ifs.fail())
 	{
-		// ボタン用フォントの作成。
-		if (!CFontAsset::Load("Button", "游ゴシック"))
-		{
-			return false;
-		}
-
-		// 画像データの読み込み。
-		CUtilities::SetCurrentDirectory("img");
-		for (auto& itr : ImageResource)
-		{
-			if (!CTextureAsset::Load(itr.first, itr.second))
-			{
-				return false;
-			}
-		}
-		CUtilities::SetCurrentDirectory("../");
-
-		return true;
+		MOF_PRINTLOG("failed to read music_list.json\n");
+		return false;
 	}
+	
+	const std::string json((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+
+	ifs.close();
+
+	// JSONデータを解析する。
+	picojson::value v;
+	const std::string err = picojson::parse(v, json);
+	if (err.empty() == false)
+	{
+		MOF_PRINTLOG(err.c_str());
+		return false;
+	}
+
+	picojson::object& obj = v.get<picojson::object>();
+	// mapをrange-based-forでまわしている。
+	for (const auto& p : obj)
+	{
+		// 配列情報を取得する。
+		picojson::array obj2 = p.second.get<picojson::array>();
+		for (const auto& q : obj2)
+		{
+			// 配列内のオブジェクトデータを取得する。
+			picojson::object obj3 = q.get<picojson::object>();
+			MusicData md;
+			for (const auto s : obj3)
+			{
+				if (s.first == "title")
+				{
+					md.title = s.second.get<std::string>();
+				}
+				if (s.first == "file_name")
+				{
+					md.fileName = s.second.get<std::string>();
+				}
+				else if (s.first == "instrument")
+				{
+					md.instrument = s.second.get<double>();
+				}
+			}
+			g_MusicData.Add(md);
+		}
+	}
+
+	return true;
 }
 
 /*************************************************************************//*!
@@ -46,18 +82,21 @@ namespace LoadFunc
 *//**************************************************************************/
 MofBool CGameApp::Initialize(void) {
 
-	// 素材フォルダの指定
+	// 素材フォルダの指定。
 	CUtilities::SetCurrentDirectory("Resource");
 
 	// 各シーンの追加と、フェード色の設定。
 	m_SceneManager
 		.Add<CTitle>(SceneName::Title)
+		.Add<CSelectScene>(SceneName::Select)
 		.Add<CGame>(SceneName::Game)
+		.Add<CResult>(SceneName::Result)
 		.Add<CLoad>(SceneName::Load)
+		.Add<CSetting>(SceneName::Setting)
 		.SetFadeColor(MOF_COLOR_WHITE);
 
 	// 読み込み関数の登録。
-	CLoad::SetLoadFunc("StartLoad", LoadFunc::StartLoad);
+	CLoad::SetLoadFunc("StartLoad", StartLoad);
 
 	// 起動時に実行する読み込み関数の指定。
 	CLoad::SetLoadFuncName("StartLoad");
@@ -80,12 +119,27 @@ MofBool CGameApp::Initialize(void) {
 MofBool CGameApp::Update(void) {
 	//キーの更新
 	g_pInput->RefreshKey();
+	g_MIDIInput.RefreshKey();
 
 	// 各シーンの更新。
 	if (!m_SceneManager.Update())
 	{
 		// シーン更新中にエラーが発生した場合の処理。
 		PostQuitMessage(1);
+	}
+
+	// キー押されたときに音出すやつ。
+	for (int i = 0; i < 256; i++)
+	{
+		if (g_MIDIInput.IsKeyPush(i))
+		{
+			g_Midiout.Play(g_MIDIInput.GetVelocity(i), i);
+		}
+
+		if (g_MIDIInput.IsKeyPull(i))
+		{
+			g_Midiout.Stop(i);
+		}
 	}
 
 	return TRUE;
@@ -101,7 +155,7 @@ MofBool CGameApp::Render(void) {
 	//描画開始
 	g_pGraphics->RenderStart();
 	//画面のクリア
-	g_pGraphics->ClearTarget(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0);
+	g_pGraphics->ClearTarget(0.0f, 0.18f, 0.24f, 0.0f, 1.0f, 0);
 
 	// 各シーンの描画。
 	if (!m_SceneManager.Render())
@@ -127,7 +181,6 @@ MofBool CGameApp::Release(void) {
 	CTextureAsset::Release();
 	CMeshAsset::Release();
 	CSoundAsset::Release();
-	CFontAsset::Release();
 
 	return TRUE;
 }

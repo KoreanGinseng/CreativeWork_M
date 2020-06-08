@@ -1,35 +1,27 @@
 #include "Game.h"
+#include "Load.h"
+
+
+CMIDIOut          g_Midiout;
 
 CGame::CGame(const CGame::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
 	// 初期化処理
+	CNote::SetAutoParam(GetData().autoParam);
+	CNote::SetKeyLength(GetData().keyLength);
+	CNote::SetKeyOffset(GetData().offsetKey);
 
-	// ボタン用フォントの登録。
-	m_pBtnFont = FontAsset("Button");
-	m_pBtnFont->SetSize(16);
+	g_NoteArray.Initialize();
+	g_PlayResult.Clear();
 
-	// ウィンドウサイズ変更のボタンの初期化。
-	m_BtnWindowSize[WINDOWSIZE::LARGE ].Initialize(Vector2( 10, 8), Vector2(50, 18), "大", m_pBtnFont);
-	m_BtnWindowSize[WINDOWSIZE::MEDIUM].Initialize(Vector2( 70, 8), Vector2(50, 18), "中", m_pBtnFont);
-	m_BtnWindowSize[WINDOWSIZE::SMALL ].Initialize(Vector2(130, 8), Vector2(50, 18), "小", m_pBtnFont);
+	g_NoteArray.SetFallSpeed(GetData().fallSpeed);
 
-	// 最前面にするボタンの初期化。
-	m_BtnAppForward.Initialize(Vector2(210, 8), Vector2(50, 18), "最前面", m_pBtnFont);
-	m_bForward = false;
-
-	// タイトルへ行くボタンの初期化。
-	m_BtnGoTitle.Initialize(Vector2(290, 8), Vector2(70, 18), "タイトルへ", m_pBtnFont);
-
-	// ゲームデータからウィンドウのサイズを変更する。
-	g_pGraphics->SetScreenSize(
-		WindowSize[GetData().windowSize].first,
-		WindowSize[GetData().windowSize].second
-	);
-
-	// プレイヤーの画像セット。
-	m_Player.SetTexture(TextureAsset("baby_boy"));
-	m_Player.SetPos(Vector2(100, 300));
+	int   size     = g_NoteArray.GetSMFData().GetNoteArray().GetArrayCount();
+	float fallTime = CheckLineY / g_NoteArray.GetFallSpeed();
+	m_EndTime      = g_NoteArray.GetSMFData().GetNoteArray()[size - 1].eventTime / 1000.0f + fallTime + 3.0f;
+	
+	m_StartTime.Start();
 }
 
 CGame::~CGame(void)
@@ -39,65 +31,202 @@ CGame::~CGame(void)
 
 void CGame::Update(void)
 {
-	// タイトルへ行くボタンが押されたらタイトルへ行こうね。
-	if (m_BtnGoTitle.IsClickL())
+	m_StartTime.Update();
+
+	// 2キーでタイトルへ戻る。
+	if (g_pInput->IsKeyPush(MOFKEY_2))
 	{
 		ChangeScene(SceneName::Title);
-
-		// 画面サイズを戻しておく。
-		g_pGraphics->SetScreenSize(
-			WindowSize[WINDOWSIZE::LARGE].first,
-			WindowSize[WINDOWSIZE::LARGE].second
-		);
 	}
-
-	for (int i = 0; i < WINDOWSIZE::WINDOWSIZE_CONT; i++)
+	// 終わったらリザルトへ。
+	if (m_StartTime.GetTime() > m_EndTime)
 	{
-		// 押されたボタンによってウィンドウのサイズを変更する。
-		if (m_BtnWindowSize[i].IsClickL())
-		{
-			g_pGraphics->SetScreenSize(WindowSize[i].first, WindowSize[i].second);
-
-			// 変更されたサイズを記憶,更新する。
-			GetData().windowSize = static_cast<WINDOWSIZE>(i);
-			break;
-		}
+		ChangeScene(SceneName::Result);
 	}
 
-	// ウィンドウ最前面の処理。
-	if (m_BtnAppForward.IsClickL())
-	{
-		m_bForward = !m_bForward;
-		m_BtnAppForward.SetString(m_bForward ? "解除" : "最前面");
-		CWindowUtillities::SetForeGround(m_bForward);
-	}
+	// ノーツの更新。
+	g_NoteArray.Update();
 }
 
 void CGame::Render(void) const
 {
-	float scale = WindowScale[CWindowUtillities::GetWindowSize()];
-	CGraphicsUtilities::RenderFillRect(
-		0, 0,
-		400 * scale, 300 * scale,
-		MOF_COLOR_RED,
-		MOF_COLOR_RED,
-		MOF_COLOR_RED,
-		MOF_COLOR_RED
-	);
+	CGraphicsUtilities::RenderString(0, 0, "Game");
 
-	// ウィンドウサイズ変更ボタンの描画。
-	for (int i = 0; i < WINDOWSIZE::WINDOWSIZE_CONT; i++)
+	// 譜面の縦の線のやつ。
+	RenderKeyLine();
+	
+	// ノーツの描画。
+	g_NoteArray.Render();
+
+	// 判定ラインの描画。
+	//RenderCheckLine();
+
+	NoteHitResult hit = CNote::GetHitResult();
+
+	CGraphicsUtilities::RenderString(
+		0, 30, "%s",
+		hit == NoteHitResult::NONE
+		? "" 
+		: hit == NoteHitResult::MISS
+		? "MISS"
+		: hit == NoteHitResult::BAD
+		? "BAD"
+		: hit == NoteHitResult::GOOD
+		? "GOOD"
+		: hit == NoteHitResult::GREAT
+		? "GREAT"
+		: "PERFECT"
+		);
+	CGraphicsUtilities::RenderString(0, 60, "Combo    : %d", g_PlayResult.combo);
+	CGraphicsUtilities::RenderString(0, 90, "MaxCombo : %d", g_PlayResult.maxCombo);
+
+	// 白鍵の描画。
+	RenderWhiteKey();
+
+	// 黒鍵の描画。
+	RenderBlackKey();
+	
+}
+
+void CGame::RenderKeyLine(void) const
+{
+	// 譜面の縦の線のやつ。
+	for (int x = 0; x <= 7; x++)
 	{
-		m_BtnWindowSize[i].Render();
+		CGraphicsUtilities::RenderLine(
+			PianoRollOffsetX + PianoWhiteKeyWidth * 2 + x * 7 * PianoWhiteKeyWidth,
+			0,
+			PianoRollOffsetX + PianoWhiteKeyWidth * 2 + x * 7 * PianoWhiteKeyWidth,
+			SceneHeight,
+			MOF_COLOR_HWHITE
+		);
+
+		CGraphicsUtilities::RenderLine(
+			PianoRollOffsetX + PianoWhiteKeyWidth * 2 + x * 7 * PianoWhiteKeyWidth + PianoWhiteKeyWidth * 3,
+			0,
+			PianoRollOffsetX + PianoWhiteKeyWidth * 2 + x * 7 * PianoWhiteKeyWidth + PianoWhiteKeyWidth * 3,
+			SceneHeight,
+			MOF_COLOR_CBLACK
+		);
+	}
+}
+
+void CGame::RenderCheckLine(void) const
+{
+	// 判定ラインの描画。
+	CGraphicsUtilities::RenderLine(10, CheckLineY, 1270, CheckLineY, MOF_COLOR_RED);
+
+	// 白鍵の上の丸いやつ。
+	for (int i = 0, x = 0; i < 88; i++)
+	{
+		MofU8 pianoKey = i + PianoKey::A0;
+
+		if (CMIDIInput::IsBlackKey(pianoKey))
+		{
+			continue;
+		}
+
+		CGraphicsUtilities::RenderCircle(
+			PianoRollOffsetX + x * PianoWhiteKeyWidth + PianoWhiteKeyWidth * 0.5f, CheckLineY, 5, MOF_COLOR_RED
+		);
+
+		x++;
+	}
+}
+
+void CGame::RenderWhiteKey(void) const
+{
+	// 白鍵の描画。
+	for (int i = 0, x = 0; i < 88; i++)
+	{
+		MofU8 pianoKey = i + PianoKey::A0;
+
+		if (CMIDIInput::IsBlackKey(pianoKey))
+		{
+			continue;
+		}
+
+		CGraphicsUtilities::RenderFillRect(
+			PianoRollOffsetX + PianoWhiteKeyWidth * x,
+			PianoRollOffsetY,
+			PianoRollOffsetX + PianoWhiteKeyWidth * (x + 1),
+			PianoRollOffsetY + PianoWhiteKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey)
+			? MOF_COLOR_HBLUE
+			: MOF_COLOR_WHITE
+		);
+
+		x++;
 	}
 
-	// 最前面設定ボタンの描画。
-	m_BtnAppForward.Render();
+	// 白鍵の間に線入れる。
+	for (int i = 0; i <= WhiteKeyCount; i++)
+	{
+		CGraphicsUtilities::RenderLine(
+			PianoRollOffsetX + i * PianoWhiteKeyWidth, PianoRollOffsetY,
+			PianoRollOffsetX + i * PianoWhiteKeyWidth, PianoRollOffsetY + PianoWhiteKeyHeight,
+			MOF_COLOR_BLACK
+		);
+	}
+}
 
-	// タイトルへ行くボタンの描画。
-	m_BtnGoTitle.Render();
+void CGame::RenderBlackKey(void) const
+{
+	// A0_Sの描画。
+	int blackX = PianoRollOffsetX + (PianoWhiteKeyWidth - PianoBlackKeyWidth * 0.5f);
+	CGraphicsUtilities::RenderFillRect(
+		blackX, PianoRollOffsetY,
+		blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+		g_MIDIInput.IsKeyHold(PianoKey::A0_S)
+		? MOF_COLOR_HRED
+		: MOF_COLOR_BLACK
+	);
 
-	// プレイヤーの描画。
-	m_Player.Render();
+	// C1_S～の描画。
+	for (int i = 0; i < 7; i++)
+	{
+		MofU8 pianoKey = PianoKey::C1_S + (i * PianoBlackKeyWidth);
 
+		blackX = PianoRollOffsetX + (PianoWhiteKeyWidth * 3 - PianoBlackKeyWidth * 0.5f) + i * (PianoWhiteKeyWidth * 7);
+		CGraphicsUtilities::RenderFillRect(
+			blackX, PianoRollOffsetY,
+			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey)
+			? MOF_COLOR_HRED
+			: MOF_COLOR_BLACK
+		);
+		blackX = PianoRollOffsetX + (PianoWhiteKeyWidth * 4 - PianoBlackKeyWidth * 0.5f) + i * (PianoWhiteKeyWidth * 7);
+		CGraphicsUtilities::RenderFillRect(
+			blackX, PianoRollOffsetY,
+			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey + 2)
+			? MOF_COLOR_HRED
+			: MOF_COLOR_BLACK
+		);
+
+		blackX = PianoRollOffsetX + (PianoWhiteKeyWidth * 6 - PianoBlackKeyWidth * 0.5f) + i * (PianoWhiteKeyWidth * 7);
+		CGraphicsUtilities::RenderFillRect(
+			blackX, PianoRollOffsetY,
+			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey + 5)
+			? MOF_COLOR_HRED
+			: MOF_COLOR_BLACK
+		);
+		blackX = PianoRollOffsetX + (PianoWhiteKeyWidth * 7 - PianoBlackKeyWidth * 0.5f) + i * (PianoWhiteKeyWidth * 7);
+		CGraphicsUtilities::RenderFillRect(
+			blackX, PianoRollOffsetY,
+			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey + 7)
+			? MOF_COLOR_HRED
+			: MOF_COLOR_BLACK
+		);
+		blackX = PianoRollOffsetX + (PianoWhiteKeyWidth * 8 - PianoBlackKeyWidth * 0.5f) + i * (PianoWhiteKeyWidth * 7);
+		CGraphicsUtilities::RenderFillRect(
+			blackX, PianoRollOffsetY,
+			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
+			g_MIDIInput.IsKeyHold(pianoKey + 9)
+			? MOF_COLOR_HRED
+			: MOF_COLOR_BLACK
+		);
+	}
 }

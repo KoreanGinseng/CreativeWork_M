@@ -3,8 +3,6 @@
 
 class CLoad : public CLoadBase
 {
-private:
-
 public:
 
 	CLoad(const CLoad::InitData& init);

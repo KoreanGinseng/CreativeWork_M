@@ -12,8 +12,11 @@
 //INCLUDE
 #include	"Mof.h"
 #include    "Title.h"
+#include    "SelectScene.h"
 #include    "Game.h"
+#include    "Result.h"
 #include    "Load.h"
+#include    "Setting.h"
 
 /*******************************//*!
 @brief	基本ゲームアプリ。

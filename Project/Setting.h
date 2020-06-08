@@ -1,18 +1,21 @@
 #pragma once
 #include "Common.h"
 
-class CTitle : public MyApp::CScene
+class CSetting : public MyApp::CScene
 {
 private:
 
-public:
-	
-	explicit CTitle(const CTitle::InitData& init);
+	int m_Select;
 
-	virtual ~CTitle(void);
-	
+public:
+
+	explicit CSetting(const InitData& init);
+
+	virtual ~CSetting(void);
+
 	virtual void Update(void) override;
-	
+
 	virtual void Render(void) const override;
 
 };
+

@@ -1,7 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "AssetBase.h"
-#include "EaseMotionController.h"
+#include "Note.h"
 
 using namespace sip;
 
@@ -10,44 +10,85 @@ enum class SceneName
 {
 	Title,
 
+	Select,
+
 	Game,
+
+	Result,
 
 	Load,
 
-};
+	Setting,
 
-// ウィンドウサイズ
-enum WINDOWSIZE {
-
-	LARGE,
-
-	MEDIUM,
-
-	SMALL,
-
-	WINDOWSIZE_CONT
 };
 
 // 各シーン共通のデータ
-struct GameData {
-
-	WINDOWSIZE    windowSize;
-
-};
-
-constexpr std::pair<int, int> WindowSize[WINDOWSIZE_CONT] =
+struct GameData 
 {
-	{ 600, 450 },
-	{ 400, 300 },
-	{ 200, 150 },
+	float      fallSpeed =           5.0f;
+
+	KeyLength  keyLength = KeyLength::_88;
+
+	Auto       autoParam =     Auto::Semi;
+
+	PianoKey   offsetKey =   PianoKey::A0;
 };
 
-constexpr float WindowScale[WINDOWSIZE_CONT] =
+// jsonData.
+struct MusicData
 {
-	1.0f,
-	1.0f,
-	0.5f,
+	std::string title;
+	std::string fileName;
+	MofU8       instrument;
 };
 
+struct PlayResult
+{
+	MofU32      perfect  = 0;
+	MofU32      great    = 0;
+	MofU32      good     = 0;
+	MofU32      bad      = 0;
+	MofU32      miss     = 0;
+
+	MofU32      combo    = 0;
+
+	MofU32      maxCombo = 0;
+
+	void Clear(void)
+	{
+		perfect  = 0;
+		great    = 0;
+		good     = 0;
+		bad      = 0;
+		miss     = 0;
+		combo    = 0;
+		maxCombo = 0;
+	}
+};
+
+extern    CNoteArray                 g_NoteArray;
+extern    CDynamicArray<MusicData>   g_MusicData;
+extern    int                        g_MusicSelect;
+extern    PlayResult                 g_PlayResult;
+
+constexpr int  SceneWidth            =                                                     1280;
+
+constexpr int  SceneHeight           =                                                      720;
+
+constexpr int  WhiteKeyCount         =                                                       52;
+										                      
+constexpr int  PianoWhiteKeyWidth    =                               SceneWidth / WhiteKeyCount;
+
+constexpr int  PianoWhiteKeyHeight   =                                                      100;
+
+constexpr int  PianoBlackKeyWidth    =                                PianoWhiteKeyWidth * 0.5f;
+
+constexpr int  PianoBlackKeyHeight   =                               PianoWhiteKeyHeight * 0.6f;
+
+constexpr int  PianoRollOffsetX      = (SceneWidth - WhiteKeyCount * PianoWhiteKeyWidth) * 0.5f;
+										                      
+constexpr int  PianoRollOffsetY      =                                                      620;
+
+constexpr int  CheckLineY            =                                         PianoRollOffsetY;
 
 using MyApp = CSceneManager<SceneName, GameData>;

@@ -9,6 +9,7 @@ CLoad::CLoad(const CLoad::InitData & init) :
 CLoad::~CLoad(void)
 {
 	// ‰ð•úˆ—
+
 }
 
 void CLoad::Update(void)
@@ -22,5 +23,7 @@ void CLoad::Update(void)
 
 void CLoad::Render(void) const
 {
+	g_pGraphics->ClearTarget(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0);
+
 	CGraphicsUtilities::RenderString(0, 0, "Loading");
 }

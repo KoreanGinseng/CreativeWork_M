@@ -1,0 +1,24 @@
+{
+  "file_list": [
+    {
+      "title": "test",
+      "file_name": "noname2.mid",
+      "instrument": 0
+    },
+    {
+      "title": "hell_and_heaven(music_box ver.)",
+      "file_name": "hell_and_heaven_Music_Box.mid",
+      "instrument": 10
+    },
+    {
+      "title": "toruko",
+      "file_name": "toruko.mid",
+      "instrument": 2
+    },
+    {
+      "title": "itumonandodemo",
+      "file_name": "sentochihiro.mid",
+      "instrument": 0
+    }
+  ]
+}
