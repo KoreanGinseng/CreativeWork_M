@@ -10,7 +10,7 @@ CTitle::CTitle(const CTitle::InitData & init) :
 	m_pBtnFont->SetSize(24);
 
 	// スタートボタンの初期化。
-	m_BtnGameStart.Initialize(Vector2(350, 300), Vector2(100, 30), "始める", m_pBtnFont);
+	m_BtnGameStart.Initialize(Vector2(250, 200), Vector2(100, 30), "始める", m_pBtnFont);
 }
 
 CTitle::~CTitle(void)
