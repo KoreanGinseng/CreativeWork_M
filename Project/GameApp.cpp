@@ -9,16 +9,30 @@
 
 //INCLUDE
 #include	"GameApp.h"
+#include    "ImageResourceDefine.h"
 
 namespace LoadFunc
 {
 	// 起動時に読み込みを行う関数。
 	bool StartLoad(void)
 	{
+		// ボタン用フォントの作成。
 		if (!CFontAsset::Load("Button", "游ゴシック"))
 		{
 			return false;
 		}
+
+		// 画像データの読み込み。
+		CUtilities::SetCurrentDirectory("img");
+		for (auto& itr : ImageResource)
+		{
+			if (!CTextureAsset::Load(itr.first, itr.second))
+			{
+				return false;
+			}
+		}
+		CUtilities::SetCurrentDirectory("../");
+
 		return true;
 	}
 }
@@ -87,7 +101,7 @@ MofBool CGameApp::Render(void) {
 	//描画開始
 	g_pGraphics->RenderStart();
 	//画面のクリア
-	g_pGraphics->ClearTarget(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0);
+	g_pGraphics->ClearTarget(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0);
 
 	// 各シーンの描画。
 	if (!m_SceneManager.Render())
