@@ -38,6 +38,8 @@ namespace sip
 		NoteType type;              // ノーツの種類
 	};
 
+	typedef CDynamicArray<NoteData> NoteDataArray;
+
 	// テンポデータ。
 	struct TempoData
 	{
@@ -95,11 +97,11 @@ namespace sip
 	{
 	private:
 
-		MofU16                   m_MaxTrackNum;  // トラックの数。
-		MofU16                   m_Resolution;   // 分解能の値。
+		MofU16                        m_MaxTrackNum;  // トラックの数。
+		MofU16                        m_Resolution;   // 分解能の値。
 
-		CDynamicArray<NoteData>  m_NoteArray;
-		CDynamicArray<TempoData> m_TempoArray;
+		CDynamicArray<NoteDataArray>  m_NoteArray;
+		CDynamicArray<TempoData>      m_TempoArray;
 
 	public:
 
@@ -113,7 +115,7 @@ namespace sip
 		// データのクリア。
 		void Clear(void);
 
-		CDynamicArray<NoteData>& GetNoteArray(void);
+		CDynamicArray<NoteDataArray>& GetNoteArray(void);
 
 		CDynamicArray<TempoData>& GetTempoArray(void);
 

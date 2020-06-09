@@ -107,6 +107,9 @@ namespace sip
 
 			// トラックデータを一気に読みこんじゃうぞい！
 			fread(pTrackData[i].pData, sizeof(byte) * (pTrackData[i].dataSize), 1, fp);
+			
+			// ノーツ配列情報を追加する。
+			m_NoteArray.Add();
 
 			// 必要な情報だけを保存していくぜ！！
 			TrackDataAnalysis(pTrackData[i].pData, pTrackData[i].dataSize, hcd);
@@ -152,7 +155,7 @@ namespace sip
 		m_TempoArray.ReSize(0);
 	}
 
-	CDynamicArray<NoteData>& CSMFData::GetNoteArray(void)
+	CDynamicArray<NoteDataArray>& CSMFData::GetNoteArray(void)
 	{
 		return m_NoteArray;
 	}
@@ -168,6 +171,9 @@ namespace sip
 		byte    statusByte  = 0x00;  // ステータスバイト
 		bool    bRunning    = false; // ランニングステータスチェック用フラグ
 		bool    bEnd        = false; // トラック終了フラグ
+
+		// ノーツ配列の最後の位置にデータを入れていく。
+		int noteArrayCount = m_NoteArray.GetArrayCount() - 1;
 
 		for (int i = 0; i < size && !bEnd;)
 		{
@@ -545,7 +551,7 @@ namespace sip
 					offNote.type = NoteType::LongEnd;
 
 					// リストにぶち込むんやで。
-					m_NoteArray.Add(offNote);
+					m_NoteArray[noteArrayCount].Add(offNote);
 
 					break;
 				}
@@ -570,7 +576,7 @@ namespace sip
 					}
 
 					// リストに情報を追加してやる。
-					m_NoteArray.Add(onNote);
+					m_NoteArray[noteArrayCount].Add(onNote);
 
 					break;
 				}
@@ -673,7 +679,7 @@ namespace sip
 			TempoData tempo = m_TempoArray[i];
 
 			int timeDifference = tempTempoList[i].eventTime - tempTempoList[i - 1].eventTime;
-			tempo.eventTime = (int)(timeDifference * m_TempoArray[i - 1].tick) + m_TempoArray[i - 1].eventTime;
+			tempo.eventTime    = (int)(timeDifference * m_TempoArray[i - 1].tick) + m_TempoArray[i - 1].eventTime;
 
 			m_TempoArray[i] = tempo;
 		}
@@ -682,16 +688,22 @@ namespace sip
 		int ncnt = m_NoteArray.GetArrayCount();
 		for (int i = 0; i < ncnt; i++)
 		{
+			int nacnt = m_NoteArray[i].GetArrayCount();
 			for (int j = tcnt - 1; j >= 0; j--)
 			{
-				if (m_NoteArray[i].eventTime >= tempTempoList[j].eventTime)
+				for (int k = 0; k < nacnt; k++)
 				{
-					NoteData note = m_NoteArray[i];
+					if (m_NoteArray[i].GetData(k).eventTime >= tempTempoList[j].eventTime)
+					{
+						NoteData note = m_NoteArray[i].GetData(k);
 
-					int timeDifference = m_NoteArray[i].eventTime - tempTempoList[j].eventTime;
-					note.eventTime = (int)(timeDifference * tempTempoList[j].tick) + m_TempoArray[j].eventTime;   // 計算後のテンポ変更イベント時間+そこからの自分の時間
-					m_NoteArray[i] = note;
-					break;
+						// 計算後のテンポ変更イベント時間+そこからの自分の時間
+						int timeDifference        = m_NoteArray[i].GetData(k).eventTime - tempTempoList[j].eventTime;
+						note.eventTime            = (int)(timeDifference * tempTempoList[j].tick) + m_TempoArray[j].eventTime;   
+						m_NoteArray[i].GetData(k) = note;
+					
+						break;
+					}
 				}
 			}
 		}
