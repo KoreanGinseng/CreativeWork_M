@@ -141,6 +141,8 @@ namespace sip
 
 		float                    m_GoalTime;
 
+		int                      m_TrackNo;
+
 		int                      m_BPM;
 
 		int                      m_TempoIndex;

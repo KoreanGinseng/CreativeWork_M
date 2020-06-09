@@ -338,6 +338,9 @@ namespace sip
 
 	void CNoteArray::Initialize(const int& trackNo)
 	{
+		// 演奏するトラックの情報取得。
+		m_TrackNo = trackNo;
+
 		// ノーツ情報の数取得。
 		int cnt = m_SMFData.GetNoteArray()[trackNo].GetArrayCount();
 
@@ -371,6 +374,7 @@ namespace sip
 			}
 		}
 
+		m_NoteArray.ReSize(0);
 		cnt = initArray.GetArrayCount();
 		for (int i = 0; i < cnt; i++)
 		{
