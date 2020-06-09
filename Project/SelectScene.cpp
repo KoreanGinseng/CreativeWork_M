@@ -25,7 +25,7 @@ void CSelectScene::Update(void)
 	// ‘I‘ð‚µ‚½‹È‚ÖGO!
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
-		ChangeScene(SceneName::Game);
+		ChangeScene(SceneName::Setting);
 		//ChangeScene(SceneName::Load);
 		//CLoad::SetLoadFunc(
 		//	"midiLoad",

@@ -67,11 +67,18 @@ bool StartLoad(void)
 				}
 			}
 			g_MusicData.Add(md);
+			g_NoteArray.Add();
 		}
 	}
 
 	// jsonから曲データの読み込みを行う。
-
+	for (int i = 0; i < g_MusicData.GetArrayCount(); i++)
+	{
+		if (!LoadStanderdMidiFile(g_MusicData[i].fileName.c_str(), g_NoteArray[i]))
+		{
+			return false;
+		}
+	}
 
 	return true;
 }

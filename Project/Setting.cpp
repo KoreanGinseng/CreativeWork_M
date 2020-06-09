@@ -17,6 +17,10 @@ void CSetting::Update(void)
 	{
 		ChangeScene(SceneName::Select);
 	}
+	if (g_pInput->IsKeyPush(MOFKEY_4))
+	{
+		ChangeScene(SceneName::Game);
+	}
 
 	// マウスホイールでのカーソル移動。
 	int wheelMove = g_pInput->GetMouseWheelMove() * 0.01f;
@@ -96,7 +100,7 @@ void CSetting::Update(void)
 			break;
 		case 5:
 			GetData().trackNo++;
-			GetData().trackNo = MOF_MIN(g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount(), GetData().trackNo);
+			GetData().trackNo = MOF_MIN(g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount() - 1, GetData().trackNo);
 			break;
 		}
 	}
@@ -110,8 +114,11 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0,  60, "KeyLength : %2d" , GetData().keyLength);
 	CGraphicsUtilities::RenderString(0,  90, "OffsetKey : %03u", GetData().offsetKey);
 	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s", GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
-	CGraphicsUtilities::RenderString(0, 150, "trackNumb : %d", GetData().trackNo);
-	CGraphicsUtilities::RenderString(0, 150, "MaxComb   : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount());
+	CGraphicsUtilities::RenderString(0, 150, "trackNum  : %d", GetData().trackNo);
+
+	CGraphicsUtilities::RenderString(0, 180, "info");
+	CGraphicsUtilities::RenderString(0, 210, "MaxComb   : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount());
+	CGraphicsUtilities::RenderString(0, 240, "instrument: %d", g_MusicData[g_MusicSelect].instrument);
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "←");
 
