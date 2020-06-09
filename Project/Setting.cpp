@@ -36,7 +36,7 @@ void CSetting::Update(void)
 	}
 
 	// セレクト数が超えないようにする。
-	m_Select = MOF_CLIPING(m_Select, 1, 4);
+	m_Select = MOF_CLIPING(m_Select, 1, 5);
 
 	if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 	{
@@ -62,6 +62,10 @@ void CSetting::Update(void)
 		case 4:
 			GetData().autoParam = (Auto)((int)GetData().autoParam - 1);
 			GetData().autoParam = (Auto)MOF_MAX(0, (int)GetData().autoParam);
+			break;
+		case 5:
+			GetData().trackNo--;
+			GetData().trackNo = MOF_MAX(0, GetData().trackNo);
 			break;
 		}
 	}
@@ -90,6 +94,10 @@ void CSetting::Update(void)
 			GetData().autoParam = (Auto)((int)GetData().autoParam + 1);
 			GetData().autoParam = (Auto)MOF_MIN(2, (int)GetData().autoParam);
 			break;
+		case 5:
+			GetData().trackNo++;
+			GetData().trackNo = MOF_MIN(g_NoteArray.GetSMFData().GetNoteArray().GetArrayCount(), GetData().trackNo);
+			break;
 		}
 	}
 }
@@ -102,6 +110,7 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0,  60, "KeyLength : %2d" , GetData().keyLength);
 	CGraphicsUtilities::RenderString(0,  90, "OffsetKey : %03u", GetData().offsetKey);
 	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s", GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
+	CGraphicsUtilities::RenderString(0, 150, "trackNumb : %d", GetData().trackNo);
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "←");
 
