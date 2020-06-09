@@ -339,7 +339,7 @@ namespace sip
 	void CNoteArray::Initialize(const int& trackNo)
 	{
 		// ノーツ情報の数取得。
-		int cnt = m_SMFData.GetNoteArray().GetArrayCount();
+		int cnt = m_SMFData.GetNoteArray()[trackNo].GetArrayCount();
 
 		// 初期化構造体配列の作成。
 		CDynamicArray<CNote::InitState> initArray;
