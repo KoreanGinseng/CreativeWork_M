@@ -25,18 +25,18 @@ void CSelectScene::Update(void)
 	// ‘I‘ð‚µ‚½‹È‚ÖGO!
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
-		ChangeScene(SceneName::Load);
-		CLoad::SetLoadFunc(
-			"midiLoad",
-			[&]
-			{
-				return LoadStanderdMidiFile(g_MusicData[g_MusicSelect].fileName.c_str(), g_NoteArray); 
-			}
-		);
-		CLoad::SetLoadFuncName("midiLoad");
-		CLoad::SetNextScene(SceneName::Game);
+		ChangeScene(SceneName::Game);
+		//ChangeScene(SceneName::Load);
+		//CLoad::SetLoadFunc(
+		//	"midiLoad",
+		//	[&]
+		//	{
+		//		return LoadStanderdMidiFile(g_MusicData[g_MusicSelect].fileName.c_str(), g_NoteArray); 
+		//	}
+		//);
+		//CLoad::SetLoadFuncName("midiLoad");
+		//CLoad::SetNextScene(SceneName::Game);
 
-		g_NoteArray.SetFallSpeed(10.0f);
 		g_Midiout.ChangeInstrument((GMInstrument)g_MusicData[g_MusicSelect].instrument);
 	}
 

@@ -29,7 +29,7 @@ void CResult::Render(void) const
 	CGraphicsUtilities::RenderString(0, 150, "MISS     : %05d", g_PlayResult.miss);
 	CGraphicsUtilities::RenderString(0, 210, "MAXCOMBO : %05d", g_PlayResult.maxCombo);
 
-	int comboCount = g_NoteArray.GetNoteArray().GetArrayCount();
+	int comboCount = g_NoteArray[g_MusicSelect].GetNoteArray().GetArrayCount();
 	bool bFullCombo = (comboCount == g_PlayResult.maxCombo);
 	CGraphicsUtilities::RenderString(0, 270, "%s", bFullCombo ? "FULLCOMBO!!!" : "");
 }

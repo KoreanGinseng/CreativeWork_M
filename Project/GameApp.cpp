@@ -70,6 +70,9 @@ bool StartLoad(void)
 		}
 	}
 
+	// jsonから曲データの読み込みを行う。
+
+
 	return true;
 }
 

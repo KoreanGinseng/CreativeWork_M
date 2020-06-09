@@ -12,14 +12,14 @@ CGame::CGame(const CGame::InitData & init) :
 	CNote::SetKeyLength(GetData().keyLength);
 	CNote::SetKeyOffset(GetData().offsetKey);
 
-	g_NoteArray.Initialize(GetData().trackNo);
+	g_NoteArray[g_MusicSelect].Initialize(GetData().trackNo);
 	g_PlayResult.Clear();
 
-	g_NoteArray.SetFallSpeed(GetData().fallSpeed);
+	g_NoteArray[g_MusicSelect].SetFallSpeed(GetData().fallSpeed);
 
-	int   size     = g_NoteArray.GetSMFData().GetNoteArray().GetArrayCount();
-	float fallTime = CheckLineY / g_NoteArray.GetFallSpeed();
-	m_EndTime      = g_NoteArray.GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
+	int   size     = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount();
+	float fallTime = CheckLineY / g_NoteArray[g_MusicSelect].GetFallSpeed();
+	m_EndTime      = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
 	m_StartTime.Start();
 }
@@ -45,7 +45,7 @@ void CGame::Update(void)
 	}
 
 	// ノーツの更新。
-	g_NoteArray.Update();
+	g_NoteArray[g_MusicSelect].Update();
 }
 
 void CGame::Render(void) const
@@ -56,7 +56,7 @@ void CGame::Render(void) const
 	RenderKeyLine();
 	
 	// ノーツの描画。
-	g_NoteArray.Render();
+	g_NoteArray[g_MusicSelect].Render();
 
 	// 判定ラインの描画。
 	//RenderCheckLine();

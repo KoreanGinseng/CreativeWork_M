@@ -25,15 +25,15 @@ enum class SceneName
 // 各シーン共通のデータ
 struct GameData 
 {
-	float      fallSpeed =           5.0f;
-
-	KeyLength  keyLength = KeyLength::_88;
-
-	Auto       autoParam =     Auto::Semi;
-
-	PianoKey   offsetKey =   PianoKey::A0;
-
-	int        trackNo   =              0;
+	float                     fallSpeed =           5.0f;
+			                  
+	KeyLength                 keyLength = KeyLength::_88;
+			                  
+	Auto                      autoParam =     Auto::Semi;
+			                  
+	PianoKey                  offsetKey =   PianoKey::A0;
+			                  
+	int                       trackNo   =              0;
 };
 
 // jsonData.
@@ -68,7 +68,8 @@ struct PlayResult
 	}
 };
 
-extern    CNoteArray                 g_NoteArray;
+
+extern    CDynamicArray<CNoteArray>  g_NoteArray;
 extern    CDynamicArray<MusicData>   g_MusicData;
 extern    int                        g_MusicSelect;
 extern    PlayResult                 g_PlayResult;

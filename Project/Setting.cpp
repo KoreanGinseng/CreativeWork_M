@@ -96,7 +96,7 @@ void CSetting::Update(void)
 			break;
 		case 5:
 			GetData().trackNo++;
-			GetData().trackNo = MOF_MIN(g_NoteArray.GetSMFData().GetNoteArray().GetArrayCount(), GetData().trackNo);
+			GetData().trackNo = MOF_MIN(g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount(), GetData().trackNo);
 			break;
 		}
 	}
@@ -111,6 +111,7 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0,  90, "OffsetKey : %03u", GetData().offsetKey);
 	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s", GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
 	CGraphicsUtilities::RenderString(0, 150, "trackNumb : %d", GetData().trackNo);
+	CGraphicsUtilities::RenderString(0, 150, "MaxComb   : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount());
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "Å©");
 

@@ -13,8 +13,8 @@ KeyLength     sip::CNote::m_sKeyLength = KeyLength::_88;
 PianoKey      sip::CNote::m_sKeyOffset = PianoKey::A0;
 Auto          sip::CNote::m_sAutoParam = Auto::Semi;
 
-sip::CNoteArray            g_NoteArray;
-PlayResult                 g_PlayResult;
+CDynamicArray<sip::CNoteArray>     g_NoteArray;
+PlayResult                         g_PlayResult;
 
 namespace sip
 {
