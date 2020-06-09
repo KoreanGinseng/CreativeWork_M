@@ -689,9 +689,9 @@ namespace sip
 		for (int i = 0; i < ncnt; i++)
 		{
 			int nacnt = m_NoteArray[i].GetArrayCount();
-			for (int j = tcnt - 1; j >= 0; j--)
+			for (int k = 0; k < nacnt; k++)
 			{
-				for (int k = 0; k < nacnt; k++)
+				for (int j = tcnt - 1; j >= 0; j--)
 				{
 					if (m_NoteArray[i].GetData(k).eventTime >= tempTempoList[j].eventTime)
 					{
