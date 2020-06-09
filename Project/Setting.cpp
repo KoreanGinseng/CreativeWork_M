@@ -52,7 +52,6 @@ void CSetting::Update(void)
 		{
 		case 1:
 			GetData().fallSpeed -= 0.1f;
-			GetData().fallSpeed = MOF_MAX(1.0f, GetData().fallSpeed);
 			break;
 		case 2:
 			GetData().keyLength =
@@ -69,21 +68,18 @@ void CSetting::Update(void)
 			break;
 		case 4:
 			GetData().autoParam = (Auto)((int)GetData().autoParam - 1);
-			GetData().autoParam = (Auto)MOF_MAX(0, (int)GetData().autoParam);
 			break;
 		case 5:
 			GetData().trackNo--;
-			GetData().trackNo = MOF_MAX(0, GetData().trackNo);
 			break;
 		}
 	}
-	if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+	else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 	{
 		switch (m_Select)
 		{
 		case 1:
 			GetData().fallSpeed += 0.1f;
-			GetData().fallSpeed = MOF_MIN(10.0f, GetData().fallSpeed);
 			break;
 		case 2:
 			GetData().keyLength =
@@ -100,14 +96,15 @@ void CSetting::Update(void)
 			break;
 		case 4:
 			GetData().autoParam = (Auto)((int)GetData().autoParam + 1);
-			GetData().autoParam = (Auto)MOF_MIN(2, (int)GetData().autoParam);
 			break;
 		case 5:
 			GetData().trackNo++;
-			GetData().trackNo = MOF_MIN(g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount() - 1, GetData().trackNo);
 			break;
 		}
 	}
+	GetData().fallSpeed = MOF_CLIPING(GetData().fallSpeed, 1.0f, 10.0f);
+	GetData().autoParam = (Auto)MOF_CLIPING((int)GetData().autoParam, 0, 2);
+	GetData().trackNo   = MOF_CLIPING(GetData().trackNo, 0, g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount() - 1);
 }
 
 void CSetting::Render(void) const
@@ -121,7 +118,8 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0, 150, "trackNum  : %d", GetData().trackNo);
 
 	CGraphicsUtilities::RenderString(0, 180, "info");
-	CGraphicsUtilities::RenderString(0, 210, "MaxComb   : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount());
+	int combCnt = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount();
+	CGraphicsUtilities::RenderString(0, 210, "MaxComb   : %d", combCnt / 2);
 	CGraphicsUtilities::RenderString(0, 240, "instrument: %d", g_MusicData[g_MusicSelect].instrument);
 	CGraphicsUtilities::RenderString(0, 270, "%s", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() ? "4キーでプレイ" : "プレイ不可");
 
