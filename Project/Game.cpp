@@ -12,14 +12,14 @@ CGame::CGame(const CGame::InitData & init) :
 	CNote::SetKeyLength(GetData().keyLength);
 	CNote::SetKeyOffset(GetData().offsetKey);
 
-	g_NoteArray.Initialize();
+	g_NoteArray.Initialize(GetData().trackNo);
 	g_PlayResult.Clear();
 
 	g_NoteArray.SetFallSpeed(GetData().fallSpeed);
 
 	int   size     = g_NoteArray.GetSMFData().GetNoteArray().GetArrayCount();
 	float fallTime = CheckLineY / g_NoteArray.GetFallSpeed();
-	m_EndTime      = g_NoteArray.GetSMFData().GetNoteArray()[size - 1].eventTime / 1000.0f + fallTime + 3.0f;
+	m_EndTime      = g_NoteArray.GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
 	m_StartTime.Start();
 }

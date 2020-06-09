@@ -32,6 +32,8 @@ struct GameData
 	Auto       autoParam =     Auto::Semi;
 
 	PianoKey   offsetKey =   PianoKey::A0;
+
+	int        trackNo   =              0;
 };
 
 // jsonData.

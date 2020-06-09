@@ -336,7 +336,7 @@ namespace sip
 		return m_SMFData.Load(pName);
 	}
 
-	void CNoteArray::Initialize(void)
+	void CNoteArray::Initialize(const int& trackNo)
 	{
 		// ノーツ情報の数取得。
 		int cnt = m_SMFData.GetNoteArray().GetArrayCount();
@@ -348,7 +348,7 @@ namespace sip
 		{
 			// ノートオンメッセージが来るまで進める。
 			CNote::InitState init;
-			NoteData on = m_SMFData.GetNoteArray()[i];
+			NoteData on = m_SMFData.GetNoteArray()[trackNo].GetData(i);
 			if (on.type == NoteType::LongStart)
 			{
 				init.noteOnData = on;
@@ -361,7 +361,7 @@ namespace sip
 			for (int j = i; j < cnt; j++)
 			{
 				// ノートオフメッセージかつ、オンメッセージと音階が同じになるまで進める。
-				NoteData off = m_SMFData.GetNoteArray()[j];
+				NoteData off = m_SMFData.GetNoteArray()[trackNo].GetData(j);
 				if (on.laneIndex == off.laneIndex && off.type == NoteType::LongEnd)
 				{
 					init.noteOffData = off;

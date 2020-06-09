@@ -153,7 +153,7 @@ namespace sip
 
 		bool Load(LPCMofChar pName);
 
-		void Initialize(void);
+		void Initialize(const int& trackNo);
 
 		void Update(void);
 
