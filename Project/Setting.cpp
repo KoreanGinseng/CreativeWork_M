@@ -19,6 +19,10 @@ void CSetting::Update(void)
 	}
 	if (g_pInput->IsKeyPush(MOFKEY_4))
 	{
+		if (g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() == 0)
+		{
+			return;
+		}
 		ChangeScene(SceneName::Game);
 	}
 
@@ -119,6 +123,7 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0, 180, "info");
 	CGraphicsUtilities::RenderString(0, 210, "MaxComb   : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount());
 	CGraphicsUtilities::RenderString(0, 240, "instrument: %d", g_MusicData[g_MusicSelect].instrument);
+	CGraphicsUtilities::RenderString(0, 270, "%s", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() ? "4キーでプレイ" : "プレイ不可");
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "←");
 

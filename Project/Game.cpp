@@ -17,7 +17,7 @@ CGame::CGame(const CGame::InitData & init) :
 
 	g_NoteArray[g_MusicSelect].SetFallSpeed(GetData().fallSpeed);
 
-	int   size     = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount();
+	int   size     = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount();
 	float fallTime = CheckLineY / g_NoteArray[g_MusicSelect].GetFallSpeed();
 	m_EndTime      = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
