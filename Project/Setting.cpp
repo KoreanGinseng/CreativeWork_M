@@ -1,4 +1,5 @@
 #include "Setting.h"
+#include "Game.h"
 
 CSetting::CSetting(const InitData & init) :
 	MyApp::CScene::IScene(init)
@@ -103,4 +104,11 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s", GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "©");
+
+
+	// ”’Œ®‚Ì•`‰æB
+	CGame::RenderWhiteKey(GetData().offsetKey, GetData().keyLength);
+
+	// •Œ®‚Ì•`‰æB
+	CGame::RenderBlackKey();
 }
