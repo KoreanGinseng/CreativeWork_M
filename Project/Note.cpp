@@ -113,7 +113,7 @@ namespace sip
 		m_bAuto = 
 			(m_sAutoParam == Auto::All) ||
 			(m_sAutoParam == Auto::Semi &&
-			(m_NoteOnData.laneIndex < m_sKeyOffset || m_NoteOnData.laneIndex > m_sKeyOffset + m_sKeyLength));
+			(m_NoteOnData.laneIndex < m_sKeyOffset || m_NoteOnData.laneIndex >= m_sKeyOffset + m_sKeyLength));
 	}
 
 	void CNote::Start(const float& spd)

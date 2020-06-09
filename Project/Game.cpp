@@ -77,14 +77,15 @@ void CGame::Render(void) const
 		? "GREAT"
 		: "PERFECT"
 		);
+
 	CGraphicsUtilities::RenderString(0, 60, "Combo    : %d", g_PlayResult.combo);
 	CGraphicsUtilities::RenderString(0, 90, "MaxCombo : %d", g_PlayResult.maxCombo);
 
 	// îíåÆÇÃï`âÊÅB
-	RenderWhiteKey();
+	CGame::RenderWhiteKey(GetData().offsetKey, GetData().keyLength);
 
 	// çïåÆÇÃï`âÊÅB
-	RenderBlackKey();
+	CGame::RenderBlackKey();
 	
 }
 
@@ -134,12 +135,18 @@ void CGame::RenderCheckLine(void) const
 	}
 }
 
-void CGame::RenderWhiteKey(void) const
+void CGame::RenderWhiteKey(const PianoKey& offset, const KeyLength& length)
 {
 	// îíåÆÇÃï`âÊÅB
 	for (int i = 0, x = 0; i < 88; i++)
 	{
 		MofU8 pianoKey = i + PianoKey::A0;
+
+		bool bKeyRange = true;
+		if (pianoKey < offset || pianoKey >= length + offset)
+		{
+			bKeyRange = false;
+		}
 
 		if (CMIDIInput::IsBlackKey(pianoKey))
 		{
@@ -153,7 +160,7 @@ void CGame::RenderWhiteKey(void) const
 			PianoRollOffsetY + PianoWhiteKeyHeight,
 			g_MIDIInput.IsKeyHold(pianoKey)
 			? MOF_COLOR_HBLUE
-			: MOF_COLOR_WHITE
+			: bKeyRange ? MOF_COLOR_WHITE : MOF_COLOR_HWHITE
 		);
 
 		x++;
@@ -170,7 +177,7 @@ void CGame::RenderWhiteKey(void) const
 	}
 }
 
-void CGame::RenderBlackKey(void) const
+void CGame::RenderBlackKey(void)
 {
 	// A0_SÇÃï`âÊÅB
 	int blackX = PianoRollOffsetX + (PianoWhiteKeyWidth - PianoBlackKeyWidth * 0.5f);

@@ -26,8 +26,8 @@ public:
 
 	void RenderCheckLine(void) const;
 
-	void RenderWhiteKey(void) const;
+	static void RenderWhiteKey(const PianoKey& offset, const KeyLength& length);
 
-	void RenderBlackKey(void) const;
+	static void RenderBlackKey(void);
 
 };
