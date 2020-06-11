@@ -99,6 +99,7 @@ namespace sip
 
 		MofU16                        m_MaxTrackNum;  // トラックの数。
 		MofU16                        m_Resolution;   // 分解能の値。
+		MofU16                        m_MidiFormat;
 
 		CDynamicArray<NoteDataArray>  m_NoteArray;
 		CDynamicArray<TempoData>      m_TempoArray;
@@ -118,6 +119,8 @@ namespace sip
 		CDynamicArray<NoteDataArray>& GetNoteArray(void);
 
 		CDynamicArray<TempoData>& GetTempoArray(void);
+
+		MofU16 GetMidiFormat(void) const;
 
 	private:
 

@@ -46,8 +46,9 @@ namespace sip
 		// 変換やつ。
 		ByteSwap(shortArray, 2);
 
-		// とりあえず保存する。
+		// フォーマット保存する。
 		hcd.format = ConvertToNum<MofU16>(shortArray);
+		m_MidiFormat = hcd.format;
 
 		// フォーマットごとにトラックの扱いが違う。 2 は複雑ということと、ほとんど使われていないことから考慮しないことにした。
 		// フォーマットが 0 の場合、すべてのチャンネルのデータを一つのトラックにまとめている。つまり、トラック数は必然的に 1 になる。
@@ -163,6 +164,11 @@ namespace sip
 	CDynamicArray<TempoData>& CSMFData::GetTempoArray(void)
 	{
 		return m_TempoArray;
+	}
+
+	MofU16 CSMFData::GetMidiFormat(void) const
+	{
+		return m_MidiFormat;
 	}
 
 	void CSMFData::TrackDataAnalysis(byte * pData, const int & size, const HeaderChunkData & hcd)
