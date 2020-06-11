@@ -32,4 +32,6 @@ void CResult::Render(void) const
 	int comboCount = g_NoteArray[g_MusicSelect].GetNoteArray().GetArrayCount();
 	bool bFullCombo = (comboCount == g_PlayResult.maxCombo);
 	CGraphicsUtilities::RenderString(0, 270, "%s", bFullCombo ? "FULLCOMBO!!!" : "");
+
+	CGraphicsUtilities::RenderString(0, 300, "Enterキーでセレクト画面へ戻る。");
 }

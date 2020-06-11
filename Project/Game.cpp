@@ -21,6 +21,11 @@ CGame::CGame(const CGame::InitData & init) :
 	float fallTime = CheckLineY / g_NoteArray[g_MusicSelect].GetFallSpeed();
 	m_EndTime      = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
+	for (int i = 0; i < g_NoteArray[g_MusicSelect].GetNoteArray().GetArrayCount(); i++)
+	{
+		MOF_PRINTLOG("%d\n", g_NoteArray[g_MusicSelect].GetNoteArray()[i].GetStartTime());
+	}
+
 	m_StartTime.Start();
 }
 
@@ -137,6 +142,11 @@ void CGame::RenderCheckLine(void) const
 
 void CGame::RenderWhiteKey(const PianoKey& offset, const KeyLength& length)
 {
+	// Œ®”Õ‚ÌŠO‘¤
+	CGraphicsUtilities::RenderFillRect(0, PianoRollOffsetY, PianoRollOffsetX, SceneHeight, MOF_COLOR_BLACK);
+	CGraphicsUtilities::RenderFillRect(SceneWidth - PianoRollOffsetX, PianoRollOffsetY, SceneWidth, SceneHeight, MOF_COLOR_BLACK);
+	CGraphicsUtilities::RenderFillRect(0, CheckLineY, SceneWidth, PianoRollOffsetY, MOF_COLOR_BLACK);
+
 	// ”’Œ®‚Ì•`‰æB
 	for (int i = 0, x = 0; i < 88; i++)
 	{

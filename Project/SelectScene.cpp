@@ -64,9 +64,13 @@ void CSelectScene::Update(void)
 
 void CSelectScene::Render(void) const
 {
-	CGraphicsUtilities::RenderString(0, 0, "Select");
+	CGraphicsUtilities::RenderString(0,   0, "Select");
 
-	CGraphicsUtilities::RenderString(0, 30, "select : %d", g_MusicSelect);
+	CGraphicsUtilities::RenderString(0,  30, "select : %d", g_MusicSelect);
 
-	CGraphicsUtilities::RenderString(0, 60, "title : %s", g_MusicData[g_MusicSelect].title.c_str());
+	CGraphicsUtilities::RenderString(0,  60, "title : %s", g_MusicData[g_MusicSelect].title.c_str());
+
+	CGraphicsUtilities::RenderString(0,  90, "上下キーで曲選択、Enterキーで演奏準備へ");
+	
+	CGraphicsUtilities::RenderString(0, 120, "");
 }

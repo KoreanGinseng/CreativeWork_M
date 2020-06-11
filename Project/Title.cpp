@@ -14,7 +14,7 @@ CTitle::~CTitle(void)
 
 void CTitle::Update(void)
 {
-	if (g_pInput->IsKeyPush(MOFKEY_1))
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
 		ChangeScene(SceneName::Select);
 	}
@@ -22,5 +22,6 @@ void CTitle::Update(void)
 
 void CTitle::Render(void) const
 {
-	CGraphicsUtilities::RenderString(0, 0, "Title");
+	CGraphicsUtilities::RenderString(0,  0, "Title");
+	CGraphicsUtilities::RenderString(0, 30, "Enterキーでセレクト画面へ");
 }
