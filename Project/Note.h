@@ -121,6 +121,8 @@ namespace sip
 		
 		static void SetKeyLength(KeyLength length);
 
+		static Auto GetAutoParam(void);
+
 		static NoteHitResult GetHitResult(void);
 
 	};
@@ -130,6 +132,8 @@ namespace sip
 	private:
 
 		CDynamicArray<CNote>     m_NoteArray;
+
+		CDynamicArray<CDynamicArray<CNote>>     m_AutoNoteArray;
 
 		float                    m_StartPosOffset;
 
@@ -170,6 +174,8 @@ namespace sip
 		CSMFData GetSMFData(void);
 
 		CDynamicArray<CNote> GetNoteArray(void);
+
+		CDynamicArray<CNote::InitState> CreateInitState(const int& trackNo);
 
 	};
 

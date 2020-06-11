@@ -205,23 +205,18 @@ namespace sip
 			return;
 		}
 
+		checkTime = MOF_ABS(checkTime);
+		
 		// 判定する。
 		if (m_bAuto)
 		{
-			checkTime = MOF_ABS(checkTime);
 			if (checkTime <= PerfectTime / 2.0f)
 			{
-				// PERFECT
-				m_sHitResult = NoteHitResult::PERFECT;
-				g_PlayResult.perfect++;
-				g_PlayResult.combo++;
-				g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
 				m_bCheck = true;
 			}
 		}
 		else if (g_MIDIInput.IsKeyPush((MofU8)m_NoteOnData.laneIndex))
 		{
-			checkTime = MOF_ABS(checkTime);
 			if (checkTime <= PerfectTime / 2.0f)
 			{
 				// PERFECT
@@ -311,6 +306,11 @@ namespace sip
 		m_sKeyLength = length;
 	}
 
+	Auto CNote::GetAutoParam(void)
+	{
+		return m_sAutoParam;
+	}
+
 	NoteHitResult CNote::GetHitResult(void)
 	{
 		return m_sHitResult;
@@ -341,47 +341,43 @@ namespace sip
 		// 演奏するトラックの情報取得。
 		m_TrackNo = trackNo;
 
-		// ノーツ情報の数取得。
-		int cnt = m_SMFData.GetNoteArray()[trackNo].GetArrayCount();
-
 		// 初期化構造体配列の作成。
-		CDynamicArray<CNote::InitState> initArray;
-		
-		for (int i = 0; i < cnt; i++)
-		{
-			// ノートオンメッセージが来るまで進める。
-			CNote::InitState init;
-			NoteData on = m_SMFData.GetNoteArray()[trackNo].GetData(i);
-			if (on.type == NoteType::LongStart)
-			{
-				init.noteOnData = on;
-			}
-			else
-			{
-				continue;
-			}
-
-			for (int j = i; j < cnt; j++)
-			{
-				// ノートオフメッセージかつ、オンメッセージと音階が同じになるまで進める。
-				NoteData off = m_SMFData.GetNoteArray()[trackNo].GetData(j);
-				if (on.laneIndex == off.laneIndex && off.type == NoteType::LongEnd)
-				{
-					init.noteOffData = off;
-					initArray.Add(init);
-					break;
-				}
-			}
-		}
+		CDynamicArray<CNote::InitState> initArray = CreateInitState(trackNo);
 
 		m_NoteArray.ReSize(0);
-		cnt = initArray.GetArrayCount();
+		int cnt = initArray.GetArrayCount();
 		for (int i = 0; i < cnt; i++)
 		{
 			m_NoteArray.Add(CNote(initArray[i]));
 		}
 
-		SetFallSpeed(5.0f);
+		// ほかのトラックに演奏情報がある場合の自動演奏設定。
+		m_AutoNoteArray.ReSize(0);
+		cnt = m_SMFData.GetNoteArray().GetArrayCount();
+
+		Auto tmp = CNote::GetAutoParam();
+		CNote::SetAutoParam(Auto::All);
+
+		for (int i = 0; i < cnt; i++)
+		{
+			if (i == trackNo)
+			{
+				continue;
+			}
+			
+			m_AutoNoteArray.Add();
+			
+			CDynamicArray<CNote::InitState> jInitArray = CreateInitState(i);
+
+			m_AutoNoteArray[m_AutoNoteArray.GetArrayCount() - 1].ReSize(0);
+			int jcnt = jInitArray.GetArrayCount();
+			for (int j = 0; j < jcnt; j++)
+			{
+				m_AutoNoteArray[m_AutoNoteArray.GetArrayCount() - 1].Add(CNote(jInitArray[j]));
+			}
+		}
+
+		CNote::SetAutoParam(tmp);
 
 		m_TempoIndex = 0;
 		m_BPM = m_SMFData.GetTempoArray()[m_TempoIndex++].bpm;
@@ -414,6 +410,19 @@ namespace sip
 				m_NoteArray[i].Start(GetFallSpeed());
 			}
 			m_NoteArray[i].Update(GetFallSpeed(), m_StopWatch.GetTime());
+		}
+
+		// 自動演奏組
+		for (int i = 0; i < m_AutoNoteArray.GetArrayCount(); i++)
+		{
+			for (int j = 0; j < m_AutoNoteArray[i].GetArrayCount(); j++)
+			{
+				if (!m_AutoNoteArray[i].GetData(j).IsStart() && m_AutoNoteArray[i].GetData(j).GetStartTime() < m_StopWatch.GetTime() * 1000)
+				{
+					m_AutoNoteArray[i].GetData(j).Start(GetFallSpeed());
+				}
+				m_AutoNoteArray[i].GetData(j).Update(GetFallSpeed(), m_StopWatch.GetTime());
+			}
 		}
 	}
 
@@ -449,6 +458,45 @@ namespace sip
 	CDynamicArray<CNote> CNoteArray::GetNoteArray(void)
 	{
 		return m_NoteArray;
+	}
+
+	CDynamicArray<CNote::InitState> CNoteArray::CreateInitState(const int & trackNo)
+	{
+
+		// ノーツ情報の数取得。
+		int cnt = m_SMFData.GetNoteArray()[trackNo].GetArrayCount();
+
+		// 初期化構造体配列の作成。
+		CDynamicArray<CNote::InitState> initArray;
+
+		for (int i = 0; i < cnt; i++)
+		{
+			// ノートオンメッセージが来るまで進める。
+			CNote::InitState init;
+			NoteData on = m_SMFData.GetNoteArray()[trackNo].GetData(i);
+			if (on.type == NoteType::LongStart)
+			{
+				init.noteOnData = on;
+			}
+			else
+			{
+				continue;
+			}
+
+			for (int j = i; j < cnt; j++)
+			{
+				// ノートオフメッセージかつ、オンメッセージと音階が同じになるまで進める。
+				NoteData off = m_SMFData.GetNoteArray()[trackNo].GetData(j);
+				if (on.laneIndex == off.laneIndex && off.type == NoteType::LongEnd)
+				{
+					init.noteOffData = off;
+					initArray.Add(init);
+					break;
+				}
+			}
+		}
+
+		return initArray;
 	}
 
 	bool LoadStanderdMidiFile(LPCMofChar pName, CNoteArray & array)
