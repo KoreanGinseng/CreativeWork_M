@@ -92,6 +92,6 @@ constexpr int  PianoRollOffsetX      = (SceneWidth - WhiteKeyCount * PianoWhiteK
 										                      
 constexpr int  PianoRollOffsetY      =                                                      620;
 
-constexpr int  CheckLineY            =                                         PianoRollOffsetY;
+constexpr int  CheckLineY            =                                    PianoRollOffsetY - 40;
 
 using MyApp = CSceneManager<SceneName, GameData>;
