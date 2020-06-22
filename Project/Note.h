@@ -73,6 +73,8 @@ namespace sip
 
 		float       m_GoalTime;
 
+		MofU8       m_Channel;
+
 		static NoteHitResult m_sHitResult;
 
 		static Auto          m_sAutoParam;
@@ -102,6 +104,8 @@ namespace sip
 		void CheckCollision(const float& nowTime);
 
 		void SetShow(const bool& b);
+
+		void SetChannel(const MofU8& channel);
 
 		bool IsStart(void) const;
 

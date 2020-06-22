@@ -26,18 +26,6 @@ void CSelectScene::Update(void)
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
 		ChangeScene(SceneName::Setting);
-		//ChangeScene(SceneName::Load);
-		//CLoad::SetLoadFunc(
-		//	"midiLoad",
-		//	[&]
-		//	{
-		//		return LoadStanderdMidiFile(g_MusicData[g_MusicSelect].fileName.c_str(), g_NoteArray); 
-		//	}
-		//);
-		//CLoad::SetLoadFuncName("midiLoad");
-		//CLoad::SetNextScene(SceneName::Game);
-
-		g_Midiout.ChangeInstrument((GMInstrument)g_MusicData[g_MusicSelect].instrument);
 	}
 
 	// マウスホイールでのカーソル移動。

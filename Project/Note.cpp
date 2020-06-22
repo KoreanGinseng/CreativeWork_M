@@ -114,6 +114,9 @@ namespace sip
 			(m_sAutoParam == Auto::All) ||
 			(m_sAutoParam == Auto::Semi &&
 			(m_NoteOnData.laneIndex < m_sKeyOffset || m_NoteOnData.laneIndex >= m_sKeyOffset + m_sKeyLength));
+
+		// 演奏するトラックを取得する。
+		m_Channel = m_NoteOnData.trackNo;
 	}
 
 	void CNote::Start(const float& spd)
@@ -171,13 +174,13 @@ namespace sip
 	{
 		if (m_Rect.Bottom > CheckLineY &&
 			m_Rect.Top    < CheckLineY &&
-			!g_Midiout.IsPlay((MofU8)m_NoteOnData.laneIndex))
+			!g_Midiout.IsPlay((MofU8)m_NoteOnData.laneIndex, m_Channel))
 		{
-			g_Midiout.Play(0.5f, (MofU8)m_NoteOnData.laneIndex);
+			g_Midiout.Play(0.5f, (MofU8)m_NoteOnData.laneIndex, m_Channel);
 		}
 		if (m_Rect.Top >= CheckLineY)
 		{
-			g_Midiout.Stop((MofU8)m_NoteOnData.laneIndex);
+			g_Midiout.Stop((MofU8)m_NoteOnData.laneIndex, m_Channel);
 			m_bShow = false;
 		}
 	}
@@ -259,6 +262,11 @@ namespace sip
 	void CNote::SetShow(const bool & b)
 	{
 		m_bShow = true;
+	}
+
+	void CNote::SetChannel(const MofU8 & channel)
+	{
+		m_Channel = channel;
 	}
 
 	bool CNote::IsStart(void) const

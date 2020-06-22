@@ -112,8 +112,11 @@ namespace sip
 			// ノーツ配列情報を追加する。
 			m_NoteArray.Add();
 
+			// 音色情報を追加していく。
+			m_InstrumentArray.Add((MofU8)0x00);
+
 			// 必要な情報だけを保存していくぜ！！
-			TrackDataAnalysis(pTrackData[i].pData, pTrackData[i].dataSize, hcd);
+			TrackDataAnalysis(pTrackData[i].pData, pTrackData[i].dataSize, hcd, i);
 
 			// メモリ解放するよおおおお。
 			if (pTrackData[i].dataSize > 1)
@@ -156,6 +159,11 @@ namespace sip
 		m_TempoArray.ReSize(0);
 	}
 
+	CDynamicArray<MofU8>& CSMFData::GetInstrumentArray(void)
+	{
+		return m_InstrumentArray;
+	}
+
 	CDynamicArray<NoteDataArray>& CSMFData::GetNoteArray(void)
 	{
 		return m_NoteArray;
@@ -166,12 +174,17 @@ namespace sip
 		return m_TempoArray;
 	}
 
+	CDynamicArray<CString>& CSMFData::GetTrackNameArray(void)
+	{
+		return m_TrackNameArray;
+	}
+
 	MofU16 CSMFData::GetMidiFormat(void) const
 	{
 		return m_MidiFormat;
 	}
 
-	void CSMFData::TrackDataAnalysis(byte * pData, const int & size, const HeaderChunkData & hcd)
+	void CSMFData::TrackDataAnalysis(byte * pData, const int & size, const HeaderChunkData & hcd, const int& trackNo)
 	{
 		MofUInt currentTime = 0;     // デルタタイムを足していく、つまり現在の時間(ms)（ノーツやソフランのイベントタイムはこれを使う）
 		byte    statusByte  = 0x00;  // ステータスバイト
@@ -307,9 +320,7 @@ namespace sip
 					// フォーマット0またはフォーマット1の第1トラックの場合、
 					// 曲名を表す。それ以外はトラック名を表す。
 
-					// TODO : フォーマット判定、トラック番号判定
-
-					// 曲名は後で使う予定なので取得はしておく。
+					// 曲名は使うので取得する。
 					char* pText = new char[length + 1];
 
 					for (int textIndex = 0; textIndex < length; textIndex++)
@@ -320,7 +331,8 @@ namespace sip
 					// 文字列終端文字を入れておく。
 					pText[length] = '\0';
 
-					// TODO : ここで文字列を保存する処理。
+					// 文字列を保存する。
+					m_TrackNameArray.Add(pText);
 
 					// メモリ確保したら解放もする。
 					if (length > 1)
@@ -555,6 +567,7 @@ namespace sip
 					offNote.eventTime = currentTime;
 					offNote.laneIndex = keyNote;
 					offNote.type = NoteType::LongEnd;
+					offNote.trackNo = trackNo;
 
 					// リストにぶち込むんやで。
 					m_NoteArray[noteArrayCount].Add(offNote);
@@ -574,6 +587,7 @@ namespace sip
 					onNote.eventTime = currentTime;
 					onNote.laneIndex = keyNote;
 					onNote.type = NoteType::LongStart;
+					onNote.trackNo = trackNo;
 
 					// ベロシティが０ならノートオフ情報として扱うため、データのタイプを変える。
 					if (velocity == 0)
@@ -646,6 +660,9 @@ namespace sip
 				{
 					// 音色。
 					byte instrument = pData[i++];
+
+					// 保存するぜええ！
+					m_InstrumentArray[trackNo] = instrument - 1;
 
 					break;
 				}

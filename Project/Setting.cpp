@@ -24,6 +24,14 @@ void CSetting::Update(void)
 			return;
 		}
 		ChangeScene(SceneName::Game);
+
+		GetData().channel = GetData().trackNo;
+
+		// 全チャンネルの音色変更。
+		for (int i = 0; i < g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray().GetArrayCount(); i++)
+		{
+			g_Midiout.ChangeInstrument((GMInstrument)g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[i], i);
+		}
 	}
 
 	// マウスホイールでのカーソル移動。
@@ -44,7 +52,7 @@ void CSetting::Update(void)
 	}
 
 	// セレクト数が超えないようにする。
-	m_Select = MOF_CLIPING(m_Select, 1, 5);
+	m_Select = MOF_CLIPING(m_Select, 1, 6);
 
 	if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 	{
@@ -71,6 +79,9 @@ void CSetting::Update(void)
 			break;
 		case 5:
 			GetData().trackNo--;
+			break;
+		case 6:
+			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo];
 			break;
 		}
 	}
@@ -114,16 +125,17 @@ void CSetting::Render(void) const
 	CGraphicsUtilities::RenderString(0,  30, "FallSpeed : %.1f", GetData().fallSpeed);
 	CGraphicsUtilities::RenderString(0,  60, "KeyLength : %2d" , GetData().keyLength);
 	CGraphicsUtilities::RenderString(0,  90, "OffsetKey : %03u", GetData().offsetKey);
-	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s", GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
-	CGraphicsUtilities::RenderString(0, 150, "trackNum  : %d", GetData().trackNo);
+	CGraphicsUtilities::RenderString(0, 120, "AutoParam : %s"  , GetData().autoParam == Auto::All ? "All" : GetData().autoParam == Auto::Semi ? "Semi" : "None");
+	CGraphicsUtilities::RenderString(0, 150, "trackNum  : %d"  , GetData().trackNo);
+	CGraphicsUtilities::RenderString(0, 180, "Instrument: %u"  , g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo]);
 
-	CGraphicsUtilities::RenderString(0, 180, "info");
+	CGraphicsUtilities::RenderString(0, 210, "info");
 	int combCnt = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount();
-	CGraphicsUtilities::RenderString(0, 210, "Midiフォーマット : %d", g_NoteArray[g_MusicSelect].GetSMFData().GetMidiFormat());
-	CGraphicsUtilities::RenderString(0, 240, "MaxComb   : %d", combCnt / 2);
-	CGraphicsUtilities::RenderString(0, 270, "instrument: %d", g_MusicData[g_MusicSelect].instrument);
-	CGraphicsUtilities::RenderString(0, 300, "%s", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() ? "4キーでプレイ" : "プレイ不可");
-	CGraphicsUtilities::RenderString(0, 330, "Enterキーでセレクト画面へ");
+	CGraphicsUtilities::RenderString(0, 240, "MidiFormat: %d", g_NoteArray[g_MusicSelect].GetSMFData().GetMidiFormat());
+	CGraphicsUtilities::RenderString(0, 270, "TrackName : %s", g_NoteArray[g_MusicSelect].GetSMFData().GetTrackNameArray()[GetData().trackNo].GetString());
+	CGraphicsUtilities::RenderString(0, 300, "MaxComb   : %d", combCnt / 2);
+	CGraphicsUtilities::RenderString(0, 330, "%s", g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() ? "4キーでプレイ" : "プレイ不可");
+	CGraphicsUtilities::RenderString(0, 360, "Enterキーでセレクト画面へ");
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "←");
 

@@ -33,6 +33,7 @@ namespace sip
 	// ノーツデータ。
 	struct NoteData
 	{
+		int      trackNo;           // トラックの番号
 		int      eventTime;         // ノーツタイミング(ms)
 		int      laneIndex;         // レーン番号
 		NoteType type;              // ノーツの種類
@@ -101,8 +102,10 @@ namespace sip
 		MofU16                        m_Resolution;   // 分解能の値。
 		MofU16                        m_MidiFormat;
 
+		CDynamicArray<MofU8>          m_InstrumentArray;
 		CDynamicArray<NoteDataArray>  m_NoteArray;
 		CDynamicArray<TempoData>      m_TempoArray;
+		CDynamicArray<CString>        m_TrackNameArray;
 
 	public:
 
@@ -116,16 +119,20 @@ namespace sip
 		// データのクリア。
 		void Clear(void);
 
+		CDynamicArray<MofU8>& GetInstrumentArray(void);
+
 		CDynamicArray<NoteDataArray>& GetNoteArray(void);
 
 		CDynamicArray<TempoData>& GetTempoArray(void);
+
+		CDynamicArray<CString>& GetTrackNameArray(void);
 
 		MofU16 GetMidiFormat(void) const;
 
 	private:
 
 		// トラックデータの解析を行う関数。
-		void TrackDataAnalysis(byte* pData, const int& size, const HeaderChunkData& hcd);
+		void TrackDataAnalysis(byte* pData, const int& size, const HeaderChunkData& hcd, const int& trackNo);
 
 		// イベントタイムの再計算を行う関数。
 		void ModificationEventTimes(void);
