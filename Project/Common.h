@@ -34,6 +34,8 @@ struct GameData
 	PianoKey                  offsetKey =   PianoKey::A0;
 			                  
 	int                       trackNo   =              0;
+
+	MofU8                     channel   =           0x00;
 };
 
 // jsonData.
@@ -41,7 +43,6 @@ struct MusicData
 {
 	std::string title;
 	std::string fileName;
-	MofU8       instrument;
 };
 
 struct PlayResult
