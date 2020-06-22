@@ -12,6 +12,8 @@
 #include    "MIDIInput.h"
 #include    "picojson.h"
 
+
+
 CDynamicArray<MusicData> g_MusicData;
 
 // 起動時に読み込みを行う関数。
@@ -61,10 +63,6 @@ bool StartLoad(void)
 				{
 					md.fileName = s.second.get<std::string>();
 				}
-				else if (s.first == "instrument")
-				{
-					md.instrument = s.second.get<double>();
-				}
 			}
 			g_MusicData.Add(md);
 			g_NoteArray.Add();
@@ -97,12 +95,12 @@ MofBool CGameApp::Initialize(void) {
 
 	// 各シーンの追加と、フェード色の設定。
 	m_SceneManager
-		.Add<CTitle>(SceneName::Title)
+		.Add<CTitle>      (SceneName::Title)
 		.Add<CSelectScene>(SceneName::Select)
-		.Add<CGame>(SceneName::Game)
-		.Add<CResult>(SceneName::Result)
-		.Add<CLoad>(SceneName::Load)
-		.Add<CSetting>(SceneName::Setting)
+		.Add<CGame>       (SceneName::Game)
+		.Add<CResult>     (SceneName::Result)
+		.Add<CLoad>       (SceneName::Load)
+		.Add<CSetting>    (SceneName::Setting)
 		.SetFadeColor(MOF_COLOR_WHITE);
 
 	// 読み込み関数の登録。
@@ -143,14 +141,16 @@ MofBool CGameApp::Update(void) {
 	{
 		if (g_MIDIInput.IsKeyPush(i))
 		{
-			g_Midiout.Play(g_MIDIInput.GetVelocity(i), i);
+			g_Midiout.Play(g_MIDIInput.GetVelocity(i), i, m_SceneManager.GetData()->channel);
 		}
 
 		if (g_MIDIInput.IsKeyPull(i))
 		{
-			g_Midiout.Stop(i);
+			g_Midiout.Stop(i, m_SceneManager.GetData()->channel);
 		}
 	}
+
+	CParty::GetParty(0);
 
 	return TRUE;
 }
