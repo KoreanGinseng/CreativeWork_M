@@ -1,9 +1,12 @@
 #pragma once
 #include "Common.h"
+#include "Button.h"
 
 class CTitle : public MyApp::CScene
 {
 private:
+
+	CButton m_StartBtn;
 
 public:
 	
