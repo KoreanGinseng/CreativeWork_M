@@ -150,8 +150,6 @@ MofBool CGameApp::Update(void) {
 		}
 	}
 
-	CParty::GetParty(0);
-
 	return TRUE;
 }
 /*************************************************************************//*!
