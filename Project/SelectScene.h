@@ -1,9 +1,14 @@
 #pragma once
 #include "Common.h"
+#include "Button.h"
 
 class CSelectScene : public MyApp::CScene
 {
 private:
+
+	CButton  m_SelectBtnUp;
+	CButton  m_SelectBtnDown;
+	CButton  m_SetBtn;
 
 public:
 

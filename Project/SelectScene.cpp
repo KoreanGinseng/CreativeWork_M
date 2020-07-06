@@ -8,7 +8,10 @@ int      g_MusicSelect = 0;
 CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
-	g_MusicSelect = 0;
+	g_MusicSelect   = 0;
+	m_SelectBtnUp   = CButton(CRectangle(500, 90,530,120), "▲");
+	m_SelectBtnDown = CButton(CRectangle(500,120,530,150), "▼");
+	m_SetBtn        = CButton(CRectangle(100,180,200,210), "決定");
 }
 
 CSelectScene::~CSelectScene(void)
@@ -17,13 +20,9 @@ CSelectScene::~CSelectScene(void)
 
 void CSelectScene::Update(void)
 {
-	if (g_pInput->IsKeyPush(MOFKEY_4))
-	{
-		ChangeScene(SceneName::Setting);
-	}
-
 	// 選択した曲へGO!
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) ||
+		m_SetBtn.IsPull())
 	{
 		ChangeScene(SceneName::Setting);
 	}
@@ -36,11 +35,13 @@ void CSelectScene::Update(void)
 	}
 
 	// 上下矢印キーでのカーソル移動。
-	if (g_pInput->IsKeyPush(MOFKEY_UP))
+	if (g_pInput->IsKeyPush(MOFKEY_UP) ||
+		m_SelectBtnUp.IsPull())
 	{
 		g_MusicSelect--;
 	}
-	if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+	if (g_pInput->IsKeyPush(MOFKEY_DOWN) ||
+		m_SelectBtnDown.IsPull())
 	{
 		g_MusicSelect++;
 	}
@@ -60,5 +61,7 @@ void CSelectScene::Render(void) const
 
 	CGraphicsUtilities::RenderString(0,  90, "上下キーで曲選択、Enterキーで演奏準備へ");
 	
-	CGraphicsUtilities::RenderString(0, 120, "");
+	m_SelectBtnDown.Render();
+	m_SelectBtnUp.Render();
+	m_SetBtn.Render();
 }
