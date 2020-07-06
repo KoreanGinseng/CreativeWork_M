@@ -4,7 +4,14 @@
 CSetting::CSetting(const InitData & init) :
 	MyApp::CScene::IScene(init)
 {
-	m_Select = 1;
+	m_Select      = 1;
+
+	m_SelectUp    = CButton(CRectangle(850, 210,  880, 240), "▲");
+	m_SelectDown  = CButton(CRectangle(850, 270,  880, 300), "▼");
+	m_SelectLeft  = CButton(CRectangle(820, 240,  850, 270), "＜");
+	m_SelectRight = CButton(CRectangle(880, 240,  910, 270), "＞");
+	m_Start       = CButton(CRectangle(800, 350,  900, 380), "開始");
+	m_Back        = CButton(CRectangle(910, 350, 1010, 380), "戻る");
 }
 
 CSetting::~CSetting(void)
@@ -13,11 +20,13 @@ CSetting::~CSetting(void)
 
 void CSetting::Update(void)
 {
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) ||
+		m_Back.IsPull())
 	{
 		ChangeScene(SceneName::Select);
 	}
-	if (g_pInput->IsKeyPush(MOFKEY_4))
+	if (g_pInput->IsKeyPush(MOFKEY_4) ||
+		m_Start.IsPull())
 	{
 		if (g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount() == 0)
 		{
@@ -38,15 +47,17 @@ void CSetting::Update(void)
 	int wheelMove = g_pInput->GetMouseWheelMove() * 0.01f;
 	if (wheelMove)
 	{
-		g_MusicSelect -= wheelMove;
+		m_Select -= wheelMove;
 	}
 
 	// 上下矢印キーでのカーソル移動。
-	if (g_pInput->IsKeyPush(MOFKEY_UP))
+	if (g_pInput->IsKeyPush(MOFKEY_UP) ||
+		m_SelectUp.IsPull())
 	{
 		m_Select--;
 	}
-	if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+	if (g_pInput->IsKeyPush(MOFKEY_DOWN) ||
+		m_SelectDown.IsPull())
 	{
 		m_Select++;
 	}
@@ -54,7 +65,8 @@ void CSetting::Update(void)
 	// セレクト数が超えないようにする。
 	m_Select = MOF_CLIPING(m_Select, 1, 6);
 
-	if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+	if (g_pInput->IsKeyPush(MOFKEY_LEFT) ||
+		m_SelectLeft.IsPull())
 	{
 		switch (m_Select)
 		{
@@ -85,7 +97,8 @@ void CSetting::Update(void)
 			break;
 		}
 	}
-	else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+	else if (g_pInput->IsKeyPush(MOFKEY_RIGHT) ||
+		     m_SelectRight.IsPull())
 	{
 		switch (m_Select)
 		{
@@ -139,6 +152,12 @@ void CSetting::Render(void) const
 
 	CGraphicsUtilities::RenderString(350, m_Select * 30, "←");
 
+	m_SelectDown.Render();
+	m_SelectUp.Render();
+	m_SelectLeft.Render();
+	m_SelectRight.Render();
+	m_Start.Render();
+	m_Back.Render();
 
 	// 白鍵の描画。
 	CGame::RenderWhiteKey(GetData().offsetKey, GetData().keyLength);
