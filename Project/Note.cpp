@@ -21,7 +21,8 @@ namespace sip
 	CNote::CNote(void) :
 		m_bStart(false),
 		m_bShow(false),
-		m_bBlack(false)
+		m_bBlack(false),
+		m_bPlayTrack(false)
 	{
 	}
 
@@ -215,11 +216,15 @@ namespace sip
 		{
 			if (checkTime <= PerfectTime / 2.0f)
 			{
+				if (m_bPlayTrack)
+				{
+					m_sHitResult = NoteHitResult::PERFECT;
+					g_PlayResult.perfect++;
+					g_PlayResult.combo++;
+					g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
+				}
 				m_bCheck = true;
 			}
-
-			// TODO : コンボカウントするようにする
-			//        ただし、演奏中以外のトラックはカウントしない
 		}
 		else if (g_MIDIInput.IsKeyPush((MofU8)m_NoteOnData.laneIndex))
 		{
@@ -270,6 +275,11 @@ namespace sip
 	void CNote::SetChannel(const MofU8 & channel)
 	{
 		m_Channel = channel;
+	}
+
+	void CNote::SetPlayTrack(const bool & b)
+	{
+		m_bPlayTrack = b;
 	}
 
 	bool CNote::IsStart(void) const
@@ -360,6 +370,7 @@ namespace sip
 		for (int i = 0; i < cnt; i++)
 		{
 			m_NoteArray.Add(CNote(initArray[i]));
+			m_NoteArray[i].SetPlayTrack(true);
 		}
 
 		// ほかのトラックに演奏情報がある場合の自動演奏設定。
@@ -461,7 +472,7 @@ namespace sip
 		return CheckLineY / m_FallSpeed;
 	}
 
-	CSMFData CNoteArray::GetSMFData(void)
+	CSMFData& CNoteArray::GetSMFData(void)
 	{
 		return m_SMFData;
 	}
