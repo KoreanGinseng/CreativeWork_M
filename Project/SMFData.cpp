@@ -662,7 +662,7 @@ namespace sip
 					byte instrument = pData[i++];
 
 					// ï€ë∂Ç∑ÇÈÇ∫Ç¶Ç¶ÅI
-					m_InstrumentArray[trackNo] = instrument - 1;
+					m_InstrumentArray[trackNo] = instrument;
 
 					break;
 				}
