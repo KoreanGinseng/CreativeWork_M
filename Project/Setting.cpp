@@ -96,7 +96,7 @@ void CSetting::Update(void)
 			GetData().trackNo--;
 			break;
 		case 6:
-			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo];
+			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo] -= 0x01;
 			break;
 		}
 	}
@@ -128,7 +128,7 @@ void CSetting::Update(void)
 			GetData().trackNo++;
 			break;
 		case 6:
-			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo];
+			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo] += 0x01;
 			break;
 		}
 	}
