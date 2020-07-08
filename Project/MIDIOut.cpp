@@ -2,7 +2,7 @@
 
 CMIDIOut::CMIDIOut(void)
 {
-	if (midiOutOpen(&m_MidiOutHandle, 0, 0, 0, 0) != MMSYSERR_NOERROR)
+	if (midiOutOpen(&m_MidiOutHandle, MIDI_MAPPER, 0, 0, 0) != MMSYSERR_NOERROR)
 	{
 		MOF_PRINTLOG("midiOutOpenError");
 		std::exit(0);
@@ -57,7 +57,7 @@ void CMIDIOut::ChangeInstrument(const GMInstrument & instrument, const MofU8& ch
 	midiOutShortMsg(m_MidiOutHandle, msg);
 }
 
-CMIDIOut CMIDIOut::GetMIDIOut(void)
+CMIDIOut& CMIDIOut::GetMIDIOut(void)
 {
 	static CMIDIOut midiOut;
 	return midiOut;
