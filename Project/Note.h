@@ -65,6 +65,8 @@ namespace sip
 
 		bool        m_bAuto;
 
+		bool        m_bPlayTrack;
+
 		bool        m_bCheck;
 
 		NoteData    m_NoteOnData;
@@ -106,6 +108,8 @@ namespace sip
 		void SetShow(const bool& b);
 
 		void SetChannel(const MofU8& channel);
+
+		void SetPlayTrack(const bool& b);
 
 		bool IsStart(void) const;
 
@@ -175,7 +179,7 @@ namespace sip
 
 		float GetFallSpeed(void) const;
 
-		CSMFData GetSMFData(void);
+		CSMFData& GetSMFData(void);
 
 		CDynamicArray<CNote> GetNoteArray(void);
 
