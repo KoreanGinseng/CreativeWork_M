@@ -217,6 +217,9 @@ namespace sip
 			{
 				m_bCheck = true;
 			}
+
+			// TODO : コンボカウントするようにする
+			//        ただし、演奏中以外のトラックはカウントしない
 		}
 		else if (g_MIDIInput.IsKeyPush((MofU8)m_NoteOnData.laneIndex))
 		{

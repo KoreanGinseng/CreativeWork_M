@@ -26,4 +26,6 @@ void CLoad::Render(void) const
 	g_pGraphics->ClearTarget(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0);
 
 	CGraphicsUtilities::RenderString(0, 0, "Loading");
+
+	// TODO : Loading中のアニメーション描画。
 }

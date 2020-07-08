@@ -13,7 +13,6 @@
 #include    "picojson.h"
 
 
-
 CDynamicArray<MusicData> g_MusicData;
 
 // 起動時に読み込みを行う関数。
@@ -63,6 +62,7 @@ bool StartLoad(void)
 				{
 					md.fileName = s.second.get<std::string>();
 				}
+				// TODO : 曲ごとに落下速度を変更するようにパラメータ「FallSpeed」を追加する。
 			}
 			g_MusicData.Add(md);
 			g_NoteArray.Add();

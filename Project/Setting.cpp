@@ -20,11 +20,14 @@ CSetting::~CSetting(void)
 
 void CSetting::Update(void)
 {
+	// 選択画面に戻る処理。
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN) ||
 		m_Back.IsPull())
 	{
 		ChangeScene(SceneName::Select);
 	}
+
+	// ゲームシーンへ遷移する処理。
 	if (g_pInput->IsKeyPush(MOFKEY_4) ||
 		m_Start.IsPull())
 	{
@@ -124,11 +127,17 @@ void CSetting::Update(void)
 		case 5:
 			GetData().trackNo++;
 			break;
+		case 6:
+			g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo];
+			break;
 		}
 	}
+
 	GetData().fallSpeed = MOF_CLIPING(GetData().fallSpeed, 1.0f, 10.0f);
 	GetData().autoParam = (Auto)MOF_CLIPING((int)GetData().autoParam, 0, 2);
 	GetData().trackNo   = MOF_CLIPING(GetData().trackNo, 0, g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount() - 1);
+	g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo] = 
+		MOF_CLIPING(g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[GetData().trackNo], 0, 127);
 }
 
 void CSetting::Render(void) const
