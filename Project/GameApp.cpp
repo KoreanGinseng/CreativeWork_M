@@ -18,6 +18,7 @@ CDynamicArray<MusicData> g_MusicData;
 // 起動時に読み込みを行う関数。
 bool StartLoad(void)
 {
+	// 読み込み中に接続されているMidiデバイス数をデバックに表示する。
 	MOF_PRINTLOG("midi device count : %d\n", g_MIDIInput.GetDeviceCount());
 
 	// JSONデータの読み込み。
