@@ -29,7 +29,7 @@ public:
 
 	void ChangeInstrument(const GMInstrument& instrument, const MofU8& channel);
 
-	static CMIDIOut GetMIDIOut(void);
+	static CMIDIOut& GetMIDIOut(void);
 };
 
 extern CMIDIOut g_Midiout;
