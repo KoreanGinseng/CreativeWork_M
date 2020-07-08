@@ -151,6 +151,16 @@ MofBool CGameApp::Update(void) {
 		}
 	}
 
+	// DEBUG : PƒL[‚ÅA4‚Ì‰¹‚ð–Â‚ç‚·
+	if (g_pInput->IsKeyPush(MOFKEY_P))
+	{
+		g_Midiout.Play(0.8f, PianoKey::A4, m_SceneManager.GetData()->channel);
+	}
+	if (g_pInput->IsKeyPull(MOFKEY_P))
+	{
+		g_Midiout.Stop(PianoKey::A4, m_SceneManager.GetData()->channel);
+	}
+
 	return TRUE;
 }
 /*************************************************************************//*!
