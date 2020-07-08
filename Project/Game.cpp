@@ -21,6 +21,7 @@ CGame::CGame(const CGame::InitData & init) :
 	float fallTime = CheckLineY / g_NoteArray[g_MusicSelect].GetFallSpeed();
 	m_EndTime      = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
+	// DEBUG : ノーツが落ちてくる秒数をデバッグプリントする。(確認用)
 	for (int i = 0; i < g_NoteArray[g_MusicSelect].GetNoteArray().GetArrayCount(); i++)
 	{
 		MOF_PRINTLOG("%d\n", g_NoteArray[g_MusicSelect].GetNoteArray()[i].GetStartTime());
