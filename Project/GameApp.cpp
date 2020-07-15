@@ -90,6 +90,12 @@ bool StartLoad(void)
 		}
 	}
 
+	// Title画像をアセットに登録する。
+	if (!CTextureAsset::Load("Title", "Title.png"))
+	{
+		return false;
+	}
+
 	return true;
 }
 

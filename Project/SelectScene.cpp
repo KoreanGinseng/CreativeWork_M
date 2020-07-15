@@ -23,10 +23,13 @@ CSelectScene::~CSelectScene(void)
 void CSelectScene::Update(void)
 {
 	// 選択した曲へGO!
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN) ||
-		m_SetBtn.IsPull())
+	if ((g_pInput->IsKeyPush(MOFKEY_RETURN) ||
+		m_SetBtn.IsPull()) &&
+		// 曲のノーツがあるかどうか判定している。
+		g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[g_MusicData[g_MusicSelect].trucks[m_TruckIndex]].GetArrayCount() > 0)
 	{
 		GetData().trackNo = g_MusicData[g_MusicSelect].trucks[m_TruckIndex];
+		GetData().channel = GetData().trackNo;
 		GetData().autoParam = m_bAuto ? Auto::All : Auto::Semi;
 		//ChangeScene(SceneName::Setting);
 		ChangeScene(SceneName::Game);

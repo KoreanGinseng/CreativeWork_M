@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Load.cpp" />
@@ -115,6 +116,9 @@
     <ClInclude Include="AssetBase.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="EaseMotion.h" />
+    <ClInclude Include="EaseMotionController.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="Load.h" />

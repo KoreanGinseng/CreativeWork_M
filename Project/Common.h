@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "AssetBase.h"
 #include "Note.h"
+#include "EaseMotionController.h"
 
 using namespace sip;
 

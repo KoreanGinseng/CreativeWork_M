@@ -5,8 +5,14 @@
 class CTitle : public MyApp::CScene
 {
 private:
+			                  
+	float                        m_Scale;
+			                     
+	float                        m_Rotate;
+							     
+	std::shared_ptr<CTexture>    m_pTitleTexture;
 
-	CButton m_StartBtn;
+	CEaseMotionController<float> m_ScaleMotion;
 
 public:
 	
