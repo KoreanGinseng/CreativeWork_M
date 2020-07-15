@@ -12,6 +12,8 @@ private:
 
 	float             m_EndTime;
 
+	static MofU8      m_sPlayChannel;
+
 public:
 	
 	explicit CGame(const CGame::InitData& init);
