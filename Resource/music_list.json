@@ -3,12 +3,14 @@
     {
       "title": "TrackCheckMusic",
       "file_name": "beeth_sym5-1.mid",
-      "fall_speed": 9.0 
+      "fall_speed": 9.0,
+      "trucks": [0,1,2]
     },
     {
       "title": "Toruko",
       "file_name": "toruko.mid",
-      "fall_speed":  7.0
+      "fall_speed":  7.0,
+      "trucks": [2]
     }
   ]
 }

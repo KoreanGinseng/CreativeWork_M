@@ -41,9 +41,10 @@ struct GameData
 // jsonData.
 struct MusicData
 {
-	std::string title;
-	std::string fileName;
-	float       fallSpd;
+	std::string        title;
+	std::string        fileName;
+	float              fallSpd;
+	std::vector<MofU8> trucks;
 };
 
 struct PlayResult

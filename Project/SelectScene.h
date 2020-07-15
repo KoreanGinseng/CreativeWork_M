@@ -10,6 +10,10 @@ private:
 	CButton  m_SelectBtnDown;
 	CButton  m_SetBtn;
 
+	MofU8    m_TruckIndex;
+
+	bool     m_bAuto;
+
 public:
 
 	explicit CSelectScene(const CSelectScene::InitData& init);

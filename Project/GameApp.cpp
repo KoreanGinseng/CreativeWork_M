@@ -63,12 +63,18 @@ bool StartLoad(void)
 				{
 					md.fileName = s.second.get<std::string>();
 				}
-				// TODO : 曲ごとに落下速度を変更するようにパラメータ「FallSpeed」を追加する。
 				if (s.first == "fall_speed")
 				{
-					md.fallSpd = s.second.get<float>();
+					md.fallSpd = s.second.get<double>();
 				}
-				// TODO : 曲ごとに演奏するトラック番号を追加できるようにパラメータ「Trucks」を追加する。
+				if (s.first == "trucks")
+				{
+					picojson::array truckArray = s.second.get<picojson::array>();
+					for (int tc = 0; tc < truckArray.size(); tc++)
+					{
+						md.trucks.push_back(truckArray[tc].get<double>());
+					}
+				}
 			}
 			g_MusicData.Add(md);
 			g_NoteArray.Add();
