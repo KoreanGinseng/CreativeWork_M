@@ -64,6 +64,7 @@ bool StartLoad(void)
 					md.fileName = s.second.get<std::string>();
 				}
 				// TODO : 曲ごとに落下速度を変更するようにパラメータ「FallSpeed」を追加する。
+				// TODO : 曲ごとに演奏するトラック番号を追加できるようにパラメータ「Trucks」を追加する。
 			}
 			g_MusicData.Add(md);
 			g_NoteArray.Add();
