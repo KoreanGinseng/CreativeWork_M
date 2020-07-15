@@ -2,11 +2,13 @@
   "file_list": [
     {
       "title": "TrackCheckMusic",
-      "file_name": "beeth_sym5-1.mid"
+      "file_name": "beeth_sym5-1.mid",
+      "fall_speed": 9.0 
     },
     {
       "title": "Toruko",
-      "file_name": "toruko.mid"
+      "file_name": "toruko.mid",
+      "fall_speed":  7.0
     }
   ]
 }

@@ -1,7 +1,7 @@
 #include "SelectScene.h"
 #include "Load.h"
 
-
+// ‰‰‘t‹È‚ÌƒŠƒXƒg”Ô†
 int      g_MusicSelect = 0;
 
 

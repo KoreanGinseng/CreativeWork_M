@@ -43,6 +43,7 @@ struct MusicData
 {
 	std::string title;
 	std::string fileName;
+	float       fallSpd;
 };
 
 struct PlayResult
