@@ -58,5 +58,7 @@ public:
 	bool IsPull(void) const;
 
 	CRectangle GetRect(void) const;
+
+	CRectangle& GetRect(void);
 };
 

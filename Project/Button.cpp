@@ -58,7 +58,19 @@ void CButton::Render(void) const
 
 void CButton::RenderTexture(void) const
 {
+	g_pGraphics->SetStencilEnable(TRUE);
+	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_ALWAYS, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR);
+	
 	m_pTexture->Render(m_Rect);
+
+	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_LESS, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP);
+	
+	if (IsHold())
+	{
+		CGraphicsUtilities::RenderFillRect(m_Rect, MOF_ALPHA_WHITE(64));
+	}
+	
+	g_pGraphics->SetStencilEnable(FALSE);
 }
 
 void CButton::RenderColor(void) const
@@ -168,6 +180,11 @@ bool CButton::IsPull(void) const
 }
 
 CRectangle CButton::GetRect(void) const
+{
+	return m_Rect;
+}
+
+CRectangle & CButton::GetRect(void)
 {
 	return m_Rect;
 }
