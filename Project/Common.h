@@ -72,6 +72,40 @@ struct PlayResult
 	}
 };
 
+// TextureData
+enum TexName
+{
+	Title,
+	Play,
+	PlayAuto,
+	Select_1,
+	Select_2,
+	Gear,
+	ArrowUp,
+	ArrowDown,
+	ArrowLeft_1,
+	ArrowLeft_2,
+	ArrowRight_1,
+	ArrowRight_2,
+	TexNameCount,
+};
+
+constexpr std::pair<char*, char*> TextureData[] =
+{
+	std::pair<char*, char*>("Title"       , "img/Title.png"       ),
+	std::pair<char*, char*>("Play"        , "img/Play.png"        ),
+	std::pair<char*, char*>("PlayAuto"    , "img/PlayAuto.png"    ),
+	std::pair<char*, char*>("Select_1"    , "img/Select_1.png"    ),
+	std::pair<char*, char*>("Select_2"    , "img/Select_2.png"    ),
+	std::pair<char*, char*>("Gear"        , "img/Gear.png"        ),
+	std::pair<char*, char*>("ArrowUp"     , "img/ArrowUp.png"     ),
+	std::pair<char*, char*>("ArrowDown"   , "img/ArrowDown.png"   ),
+	std::pair<char*, char*>("ArrowLeft_1" , "img/ArrowLeft_1.png" ),
+	std::pair<char*, char*>("ArrowLeft_2" , "img/ArrowLeft_2.png" ),
+	std::pair<char*, char*>("ArrowRight_1", "img/ArrowRight_1.png"),
+	std::pair<char*, char*>("ArrowRight_2", "img/ArrowRight_2.png"),
+};
+
 
 extern    CDynamicArray<CNoteArray>  g_NoteArray;
 extern    CDynamicArray<MusicData>   g_MusicData;
