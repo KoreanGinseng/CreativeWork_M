@@ -2,7 +2,7 @@
 #include "Load.h"
 
 
-CMIDIOut          g_Midiout;
+CMIDIOut          g_MidiOutput;
 
 MofU8             CGame::m_sPlayChannel = 0x00;
 
@@ -37,6 +37,12 @@ CGame::CGame(const CGame::InitData & init) :
 CGame::~CGame(void)
 {
 	// ‰ğ•úˆ—
+
+	// ‘S•”‚Ì‰¹‚ğˆê‰ñ~‚ß‚éB
+	for (int i = 0; i < 128; i++)
+	{
+		g_MidiOutput.Stop((MofU8)i, m_sPlayChannel);
+	}
 }
 
 void CGame::Update(void)
@@ -173,8 +179,7 @@ void CGame::RenderWhiteKey(const PianoKey& offset, const KeyLength& length)
 			PianoRollOffsetY,
 			PianoRollOffsetX + PianoWhiteKeyWidth * (x + 1),
 			PianoRollOffsetY + PianoWhiteKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey)*/
-			g_Midiout.IsPlay(pianoKey, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey, m_sPlayChannel)
 			? MOF_COLOR_HBLUE
 			: bKeyRange ? MOF_COLOR_WHITE : MOF_COLOR_HWHITE
 		);
@@ -200,8 +205,7 @@ void CGame::RenderBlackKey(void)
 	CGraphicsUtilities::RenderFillRect(
 		blackX, PianoRollOffsetY,
 		blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-		/*g_MIDIInput.IsKeyHold(PianoKey::A0_S)*/
-		g_Midiout.IsPlay(PianoKey::A0_S, m_sPlayChannel)
+		g_MidiOutput.IsPlay(PianoKey::A0_S, m_sPlayChannel)
 		? MOF_COLOR_HRED
 		: MOF_COLOR_BLACK
 	);
@@ -215,8 +219,7 @@ void CGame::RenderBlackKey(void)
 		CGraphicsUtilities::RenderFillRect(
 			blackX, PianoRollOffsetY,
 			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey)*/
-			g_Midiout.IsPlay(pianoKey, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey, m_sPlayChannel)
 			? MOF_COLOR_HRED
 			: MOF_COLOR_BLACK
 		);
@@ -224,8 +227,7 @@ void CGame::RenderBlackKey(void)
 		CGraphicsUtilities::RenderFillRect(
 			blackX, PianoRollOffsetY,
 			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey + 2)*/
-			g_Midiout.IsPlay(pianoKey + 2, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey + 2, m_sPlayChannel)
 			? MOF_COLOR_HRED
 			: MOF_COLOR_BLACK
 		);
@@ -234,8 +236,7 @@ void CGame::RenderBlackKey(void)
 		CGraphicsUtilities::RenderFillRect(
 			blackX, PianoRollOffsetY,
 			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey + 5)*/
-			g_Midiout.IsPlay(pianoKey + 5, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey + 5, m_sPlayChannel)
 			? MOF_COLOR_HRED
 			: MOF_COLOR_BLACK
 		);
@@ -243,8 +244,7 @@ void CGame::RenderBlackKey(void)
 		CGraphicsUtilities::RenderFillRect(
 			blackX, PianoRollOffsetY,
 			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey + 7)*/
-			g_Midiout.IsPlay(pianoKey + 7, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey + 7, m_sPlayChannel)
 			? MOF_COLOR_HRED
 			: MOF_COLOR_BLACK
 		);
@@ -252,8 +252,7 @@ void CGame::RenderBlackKey(void)
 		CGraphicsUtilities::RenderFillRect(
 			blackX, PianoRollOffsetY,
 			blackX + PianoBlackKeyWidth, PianoRollOffsetY + PianoBlackKeyHeight,
-			/*g_MIDIInput.IsKeyHold(pianoKey + 9)*/
-			g_Midiout.IsPlay(pianoKey + 9, m_sPlayChannel)
+			g_MidiOutput.IsPlay(pianoKey + 9, m_sPlayChannel)
 			? MOF_COLOR_HRED
 			: MOF_COLOR_BLACK
 		);

@@ -90,10 +90,23 @@ bool StartLoad(void)
 		}
 	}
 
-	// Title画像をアセットに登録する。
-	if (!CTextureAsset::Load("Title", "Title.png"))
+	// フォントを作成する。
+	if (!CFontAsset::Load("MusicName", "ＭＳ ゴシック"))
 	{
 		return false;
+	}
+	if (!CFontAsset::Load("Info", "ＭＳ 明朝"))
+	{
+		return false;
+	}
+
+	// 各画像をアセットに登録する。
+	for (auto& itr : TextureData)
+	{
+		if (!CTextureAsset::Load(itr.first, itr.second))
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -159,23 +172,23 @@ MofBool CGameApp::Update(void) {
 	{
 		if (g_MIDIInput.IsKeyPush(i))
 		{
-			g_Midiout.Play(g_MIDIInput.GetVelocity(i), i, m_SceneManager.GetData()->channel);
+			g_MidiOutput.Play(g_MIDIInput.GetVelocity(i), i, m_SceneManager.GetData()->channel);
 		}
 
 		if (g_MIDIInput.IsKeyPull(i))
 		{
-			g_Midiout.Stop(i, m_SceneManager.GetData()->channel);
+			g_MidiOutput.Stop(i, m_SceneManager.GetData()->channel);
 		}
 	}
 
 	// DEBUG : PキーでA4の音を鳴らす
 	if (g_pInput->IsKeyPush(MOFKEY_P))
 	{
-		g_Midiout.Play(0.8f, PianoKey::A4, m_SceneManager.GetData()->channel);
+		g_MidiOutput.Play(0.8f, PianoKey::A4, m_SceneManager.GetData()->channel);
 	}
 	if (g_pInput->IsKeyPull(MOFKEY_P))
 	{
-		g_Midiout.Stop(PianoKey::A4, m_SceneManager.GetData()->channel);
+		g_MidiOutput.Stop(PianoKey::A4, m_SceneManager.GetData()->channel);
 	}
 
 	return TRUE;

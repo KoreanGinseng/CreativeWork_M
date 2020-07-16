@@ -42,7 +42,7 @@ void CSetting::Update(void)
 		// 全チャンネルの音色変更。
 		for (int i = 0; i < g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray().GetArrayCount(); i++)
 		{
-			g_Midiout.ChangeInstrument((GMInstrument)g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[i], i);
+			g_MidiOutput.ChangeInstrument((GMInstrument)g_NoteArray[g_MusicSelect].GetSMFData().GetInstrumentArray()[i], i);
 		}
 	}
 

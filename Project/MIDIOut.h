@@ -32,4 +32,4 @@ public:
 	static CMIDIOut& GetMIDIOut(void);
 };
 
-extern CMIDIOut g_Midiout;
+extern CMIDIOut g_MidiOutput;

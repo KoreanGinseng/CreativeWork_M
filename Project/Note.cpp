@@ -175,13 +175,13 @@ namespace sip
 	{
 		if (m_Rect.Bottom > CheckLineY &&
 			m_Rect.Top    < CheckLineY &&
-			!g_Midiout.IsPlay((MofU8)m_NoteOnData.laneIndex, m_Channel))
+			!g_MidiOutput.IsPlay((MofU8)m_NoteOnData.laneIndex, m_Channel))
 		{
-			g_Midiout.Play(0.5f, (MofU8)m_NoteOnData.laneIndex, m_Channel);
+			g_MidiOutput.Play(0.5f, (MofU8)m_NoteOnData.laneIndex, m_Channel);
 		}
 		if (m_Rect.Top >= CheckLineY)
 		{
-			g_Midiout.Stop((MofU8)m_NoteOnData.laneIndex, m_Channel);
+			g_MidiOutput.Stop((MofU8)m_NoteOnData.laneIndex, m_Channel);
 			m_bShow = false;
 		}
 	}
