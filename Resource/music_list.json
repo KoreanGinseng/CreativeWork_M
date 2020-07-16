@@ -2,15 +2,33 @@
   "file_list": [
     {
       "title": "TrackCheckMusic",
-      "file_name": "beeth_sym5-1.mid",
+      "file_name": "music/beeth_sym5-1.mid",
       "fall_speed": 9.0,
-      "trucks": [0,1,2]
+      "trucks": [ 1, 2, 3, 4 ]
     },
     {
       "title": "Toruko",
-      "file_name": "toruko.mid",
-      "fall_speed":  7.0,
-      "trucks": [2]
+      "file_name": "music/toruko.mid",
+      "fall_speed": 7.0,
+      "trucks": [ 2 ]
+    },
+    {
+      "title": "SenToChihiro",
+      "file_name": "music/sentochihiro.mid",
+      "fall_speed": 1.0,
+      "trucks": [ 4 ]
+    },
+    {
+      "title": "noname2",
+      "file_name": "music/noname2.mid",
+      "fall_speed": 5.0,
+      "trucks": [ 1, 2, 3, 4 ]
+    },
+    {
+      "title": "noname5",
+      "file_name": "music/noname5.mid",
+      "fall_speed": 7.0,
+      "trucks": [ 1, 2, 3, 4 ]
     }
   ]
 }
