@@ -10,6 +10,11 @@ CGame::CGame(const CGame::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
 	// 初期化処理
+
+	// フォントの設定。
+	m_pFont = FontAsset("Info");
+	m_pFont->SetSize(40);
+
 	// 演奏するチャンネルの設定。
 	m_sPlayChannel = GetData().channel;
 
@@ -46,6 +51,10 @@ CGame::CGame(const CGame::InitData & init) :
 	// 演奏するスコアの登録。
 	m_ScoreKey = std::pair<std::string, int>(pMusicData->title.c_str(), GetData().trackNo);
 
+	// モーションの作成。
+	m_ComboMotion << CEaseMotion<float>( 0.0f, -5.0f, Ease::Out, EaseType::Expo, 0.1f);
+	m_ComboMotion << CEaseMotion<float>(-5.0f,  0.0f, Ease::In , EaseType::Expo, 0.1f);
+
 	// タイマーをスタートさせる。
 	m_StartTime.Start();
 }
@@ -64,6 +73,8 @@ CGame::~CGame(void)
 void CGame::Update(void)
 {
 	m_StartTime.Update();
+
+	int prevCombo = g_PlayResult.combo;
 
 	// 2キーでタイトルへ戻る。
 	if (g_pInput->IsKeyPush(MOFKEY_2))
@@ -90,12 +101,19 @@ void CGame::Update(void)
 
 	// ノーツの更新。
 	g_NoteArray[g_MusicSelect].Update();
+
+	// コンボのモーションを再生する。
+	if (prevCombo != g_PlayResult.combo)
+	{
+		m_ComboMotion.Reset();
+		m_ComboMotion.Start();
+	}
+
+	m_ComboMotion.Update();
 }
 
 void CGame::Render(void) const
 {
-	CGraphicsUtilities::RenderString(0, 0, "Game");
-
 	// 譜面の縦の線のやつ。
 	RenderKeyLine();
 	
@@ -104,13 +122,35 @@ void CGame::Render(void) const
 
 	// 判定ラインの描画。
 	//RenderCheckLine();
+	
+	// スコアの描画。
+	CRectangle scoreRect;
+	m_pFont->CalculateStringRect(30, 30, "0000000000", scoreRect);
+	scoreRect.Expansion(10);
+	CGraphicsUtilities::RenderFillRect(scoreRect, MOF_ALPHA_BLACK(0), MOF_ALPHA_BLACK(64), MOF_ALPHA_BLACK(0), MOF_ALPHA_BLACK(64));
+	m_pFont->RenderFormatString(30, 30, MOF_ALPHA_WHITE(196), "%010d", m_Score.GetScore());
 
+	// コンボカウントを表示する位置を計算する。
+	CRectangle comboRect;
+	m_pFont->CalculateStringRect(0, 0, std::string(std::to_string(g_PlayResult.combo) + " Combo").c_str(), comboRect);
+	int offsetX = SceneWidth - comboRect.Right - 30;
+
+	// コンボカウントのアニメーション表示。
+	m_pFont->RenderFormatString(offsetX, 60 + m_ComboMotion.GetValue(), MOF_ALPHA_WHITE(196), "%d", g_PlayResult.combo);
+
+	// Comboを表示するためにずらす位置を再計算する。
+	m_pFont->CalculateStringRect(0, 0, std::to_string(g_PlayResult.combo).c_str(), comboRect);
+	m_pFont->RenderString(offsetX + comboRect.Right, 60, MOF_ALPHA_WHITE(196), " Combo");
+
+	// とりあえずラインひいとけばそれっぽく見える。
+	CGraphicsUtilities::RenderLine(offsetX - 10, 60 + comboRect.Bottom + 3, SceneWidth - 10, 60 + comboRect.Bottom + 3, MOF_ALPHA_WHITE(196));
+
+	// ヒットリザルトの描画。
 	NoteHitResult hit = CNote::GetHitResult();
 
-	CGraphicsUtilities::RenderString(
-		0, 30, "%s",
-		hit == NoteHitResult::NONE
-		? "" 
+	std::string hitstr = 
+		  hit == NoteHitResult::NONE
+		? ""
 		: hit == NoteHitResult::MISS
 		? "MISS"
 		: hit == NoteHitResult::BAD
@@ -119,12 +159,13 @@ void CGame::Render(void) const
 		? "GOOD"
 		: hit == NoteHitResult::GREAT
 		? "GREAT"
-		: "PERFECT"
-		);
+		: "PERFECT";
 
-	CGraphicsUtilities::RenderString(0,  60, "Combo    : %d", g_PlayResult.combo);
-	CGraphicsUtilities::RenderString(0,  90, "MaxCombo : %d", g_PlayResult.maxCombo);
-	CGraphicsUtilities::RenderString(0, 120, "Score    : %d", m_Score.GetScore());
+	m_pFont->CalculateStringRect(0, 0, hitstr.c_str(), comboRect);
+	m_pFont->RenderFormatString(
+		SceneWidth - comboRect.Right - 30, 60 + comboRect.Bottom + 10, MOF_ALPHA_WHITE(196), "%s",
+		hitstr.c_str()
+	);
 
 	// 白鍵の描画。
 	CGame::RenderWhiteKey(GetData().offsetKey, GetData().keyLength);

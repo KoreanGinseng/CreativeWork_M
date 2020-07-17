@@ -5,15 +5,19 @@ class CGame : public MyApp::CScene
 {
 private:
 
-	CStopWatch              m_StartTime;
-					        
-	float                   m_EndTime;
-					        
-	CScore                  m_Score;
+	CStopWatch                   m_StartTime;
+					             
+	float                        m_EndTime;
+					             
+	CScore                       m_Score;
+							     
+	ScoreKey                     m_ScoreKey;
+							     
+	std::shared_ptr<CFontA>      m_pFont;
 
-	ScoreKey                m_ScoreKey;
+	CEaseMotionController<float> m_ComboMotion;
 
-	static MofU8            m_sPlayChannel;
+	static MofU8                 m_sPlayChannel;
 
 public:
 	

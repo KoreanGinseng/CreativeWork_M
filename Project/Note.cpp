@@ -226,7 +226,6 @@ namespace sip
 					m_sHitResult = NoteHitResult::PERFECT;
 					g_PlayResult.perfect++;
 					g_PlayResult.combo++;
-					g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
 				}
 				m_bCheck = true;
 			}
