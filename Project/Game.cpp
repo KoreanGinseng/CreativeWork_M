@@ -10,27 +10,43 @@ CGame::CGame(const CGame::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
 	// 初期化処理
+	// 演奏するチャンネルの設定。
 	m_sPlayChannel = GetData().channel;
+
+	// 演奏するパラメータの設定。
 	CNote::SetAutoParam(GetData().autoParam);
 	CNote::SetKeyLength(GetData().keyLength);
 	CNote::SetKeyOffset(GetData().offsetKey);
 
-	g_NoteArray[g_MusicSelect].Initialize(GetData().trackNo);
+	// アクセスの簡略化。
+	CNoteArray*    pNoteArray           = &(g_NoteArray[g_MusicSelect]);
+	MusicData*     pMusicData           = &(g_MusicData[g_MusicSelect]);
+	CDynamicArray<NoteDataArray>* pNDAA = &(pNoteArray->GetSMFData().GetNoteArray());
+	NoteDataArray* pNoteDataArray       = &((*pNDAA)[GetData().trackNo]);
+
+	// 演奏するノーツを初期化する。
+	pNoteArray->Initialize(GetData().trackNo, &m_Score);
+	// 演奏結果のリセット。
 	g_PlayResult.Clear();
 
-	//g_NoteArray[g_MusicSelect].SetFallSpeed(GetData().fallSpeed);
-	g_NoteArray[g_MusicSelect].SetFallSpeed(g_MusicData[g_MusicSelect].fallSpd);
+	// 落下速度の設定。
+	pNoteArray->SetFallSpeed(pMusicData->fallSpd);
 
-	int   size     = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetArrayCount();
-	float fallTime = CheckLineY / g_NoteArray[g_MusicSelect].GetFallSpeed();
-	m_EndTime      = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[GetData().trackNo].GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
+	// 演奏終了時間の算出。
+	int   size     = pNoteDataArray->GetArrayCount();
+	float fallTime = CheckLineY / pNoteArray->GetFallSpeed();
+	m_EndTime      = pNoteDataArray->GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
 	
 	// DEBUG : ノーツが落ちてくる秒数をデバッグプリントする。(確認用)
-	for (int i = 0; i < g_NoteArray[g_MusicSelect].GetNoteArray().GetArrayCount(); i++)
+	for (int i = 0; i < pNoteArray->GetNoteArray().GetArrayCount(); i++)
 	{
-		MOF_PRINTLOG("%d\n", g_NoteArray[g_MusicSelect].GetNoteArray()[i].GetStartTime());
+		MOF_PRINTLOG("%d\n", pNoteArray->GetNoteArray()[i].GetStartTime());
 	}
 
+	// 演奏するスコアの登録。
+	m_ScoreKey = std::pair<std::string, int>(pMusicData->title.c_str(), GetData().trackNo);
+
+	// タイマーをスタートさせる。
 	m_StartTime.Start();
 }
 
@@ -57,6 +73,18 @@ void CGame::Update(void)
 	// 終わったらリザルトへ。
 	if (m_StartTime.GetTime() > m_EndTime)
 	{
+		// スコアの更新判定。
+		int prev = CScoreManager::GetScoreValue(m_ScoreKey);
+		int now = m_Score.GetScore();
+		if (prev < now)
+		{
+			CScoreManager::GetScore(m_ScoreKey).SetScore(now);
+		}
+		if (g_PlayResult.maxCombo > CScoreManager::GetScore(m_ScoreKey).GetMaxCombo())
+		{
+			CScoreManager::GetScore(m_ScoreKey).SetMaxCombo(g_PlayResult.maxCombo);
+		}
+
 		ChangeScene(SceneName::Result);
 	}
 
@@ -94,8 +122,9 @@ void CGame::Render(void) const
 		: "PERFECT"
 		);
 
-	CGraphicsUtilities::RenderString(0, 60, "Combo    : %d", g_PlayResult.combo);
-	CGraphicsUtilities::RenderString(0, 90, "MaxCombo : %d", g_PlayResult.maxCombo);
+	CGraphicsUtilities::RenderString(0,  60, "Combo    : %d", g_PlayResult.combo);
+	CGraphicsUtilities::RenderString(0,  90, "MaxCombo : %d", g_PlayResult.maxCombo);
+	CGraphicsUtilities::RenderString(0, 120, "Score    : %d", m_Score.GetScore());
 
 	// 白鍵の描画。
 	CGame::RenderWhiteKey(GetData().offsetKey, GetData().keyLength);

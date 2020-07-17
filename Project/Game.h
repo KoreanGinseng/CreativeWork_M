@@ -1,18 +1,19 @@
 #pragma once
 #include "Common.h"
-#include "MIDIInput.h"
-#include "MIDIOut.h"
-#include "Note.h"
 
 class CGame : public MyApp::CScene
 {
 private:
 
-	CStopWatch        m_StartTime;
+	CStopWatch              m_StartTime;
+					        
+	float                   m_EndTime;
+					        
+	CScore                  m_Score;
 
-	float             m_EndTime;
+	ScoreKey                m_ScoreKey;
 
-	static MofU8      m_sPlayChannel;
+	static MofU8            m_sPlayChannel;
 
 public:
 	

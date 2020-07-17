@@ -112,24 +112,26 @@ extern    CDynamicArray<MusicData>   g_MusicData;
 extern    int                        g_MusicSelect;
 extern    PlayResult                 g_PlayResult;
 
-constexpr int  SceneWidth            =                                                     1280;
+constexpr int    SceneWidth            =                                                     1280;
+			     
+constexpr int    SceneHeight           =                                                      720;
+			     
+constexpr int    WhiteKeyCount         =                                                       52;
+				  						                      
+constexpr int    PianoWhiteKeyWidth    =                               SceneWidth / WhiteKeyCount;
+			     
+constexpr int    PianoWhiteKeyHeight   =                                                      100;
+			     
+constexpr int    PianoBlackKeyWidth    =                                PianoWhiteKeyWidth * 0.5f;
+			     
+constexpr int    PianoBlackKeyHeight   =                               PianoWhiteKeyHeight * 0.6f;
+			     
+constexpr int    PianoRollOffsetX      = (SceneWidth - WhiteKeyCount * PianoWhiteKeyWidth) * 0.5f;
+				  						                      
+constexpr int    PianoRollOffsetY      =                                                      620;
+			     
+constexpr int    CheckLineY            =                                    PianoRollOffsetY - 40;
 
-constexpr int  SceneHeight           =                                                      720;
-
-constexpr int  WhiteKeyCount         =                                                       52;
-										                      
-constexpr int  PianoWhiteKeyWidth    =                               SceneWidth / WhiteKeyCount;
-
-constexpr int  PianoWhiteKeyHeight   =                                                      100;
-
-constexpr int  PianoBlackKeyWidth    =                                PianoWhiteKeyWidth * 0.5f;
-
-constexpr int  PianoBlackKeyHeight   =                               PianoWhiteKeyHeight * 0.6f;
-
-constexpr int  PianoRollOffsetX      = (SceneWidth - WhiteKeyCount * PianoWhiteKeyWidth) * 0.5f;
-										                      
-constexpr int  PianoRollOffsetY      =                                                      620;
-
-constexpr int  CheckLineY            =                                    PianoRollOffsetY - 40;
+constexpr double Version               =                                                      0.1;
 
 using MyApp = CSceneManager<SceneName, GameData>;

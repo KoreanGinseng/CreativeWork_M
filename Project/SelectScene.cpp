@@ -8,31 +8,37 @@ int      g_MusicSelect = 0;
 CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
-	g_MusicSelect   = 0;
+	m_pNameFont = FontAsset("MusicName");
+	m_pInfoFont = FontAsset("Info");
+	m_pNameFont->SetSize(50);
+	m_pInfoFont->SetSize(36);
 
 	float x = SceneWidth  - 180;
 	float y = SceneHeight - 110;
-	m_PlayBtn       = CButton(CRectangle(              x,               y,         x + 150,           y + 80));
-	m_PlayAutoBtn   = CButton(CRectangle(        x - 250,               y,         x -  30,           y + 80));
-	m_SelectBtnUp   = CButton(CRectangle(            530,              30,             580,               80));
-	m_SelectBtnDown = CButton(CRectangle(            530,SceneHeight - 80,             580, SceneHeight - 30));
-	m_SetBtn        = CButton(CRectangle(SceneWidth - 80,              30, SceneWidth - 30,               80));
+	m_PlayBtn          = CButton(CRectangle(              x,               y,         x + 150,           y + 80));
+	m_PlayAutoBtn      = CButton(CRectangle(        x - 250,               y,         x -  30,           y + 80));
+	m_SelectBtnUp      = CButton(CRectangle(            530,              30,             580,               80));
+	m_SelectBtnDown    = CButton(CRectangle(            530,SceneHeight - 80,             580, SceneHeight - 30));
+	m_SetBtn           = CButton(CRectangle(SceneWidth - 80,              30, SceneWidth - 30,               80));
+	m_SelectBtnLeft_1  = CButton(CRectangle(   927 + 50 + 5,             400,        982 + 50,         400 + 31));
+	m_SelectBtnLeft_2  = CButton(CRectangle(            927,             400,        927 + 50,         400 + 31));
+	m_SelectBtnRight_1 = CButton(CRectangle(           1130,             400,       1130 + 50,         400 + 31));
+	m_SelectBtnRight_2 = CButton(CRectangle(  1130 + 50 + 5,             400,       1185 + 50,         400 + 31));
 	
-	m_SelectBtnUp  .SetTexture(TextureAsset("ArrowUp"));
-	m_SelectBtnDown.SetTexture(TextureAsset("ArrowDown"));
-	m_SetBtn       .SetTexture(TextureAsset("Gear"));
-	m_PlayBtn      .SetTexture(TextureAsset("Play"));
-	m_PlayAutoBtn  .SetTexture(TextureAsset("PlayAuto"));
+	m_SelectBtnUp     .SetTexture(TextureAsset("ArrowUp"));
+	m_SelectBtnDown   .SetTexture(TextureAsset("ArrowDown"));
+	m_SetBtn          .SetTexture(TextureAsset("Gear"));
+	m_PlayBtn         .SetTexture(TextureAsset("Play"));
+	m_PlayAutoBtn     .SetTexture(TextureAsset("PlayAuto"));
+	m_SelectBtnLeft_1 .SetTexture(TextureAsset("ArrowLeft_1"));
+	m_SelectBtnLeft_2 .SetTexture(TextureAsset("ArrowLeft_2"));
+	m_SelectBtnRight_1.SetTexture(TextureAsset("ArrowRight_1"));
+	m_SelectBtnRight_2.SetTexture(TextureAsset("ArrowRight_2"));
 
 	m_TruckIndex    = 0;
 
 	m_pSelect1Texture = TextureAsset("Select_1");
 	m_pSelect2Texture = TextureAsset("Select_2");
-
-	m_pNameFont = FontAsset("MusicName");
-	m_pInfoFont = FontAsset("Info");
-	m_pNameFont->SetSize(50);
-	m_pInfoFont->SetSize(36);
 
 	m_ArrowMotion << CEaseMotion<float>(0.0f, 5.0f, Ease::InOut, EaseType::Sine, 0.5f);
 	m_ArrowMotion << CEaseMotion<float>(5.0f, 0.0f, Ease::InOut, EaseType::Sine, 0.5f);
@@ -154,13 +160,23 @@ void CSelectScene::Update(void)
 	}
 
 	// 左右矢印キーでトラックの選択。
-	if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+	if (g_pInput->IsKeyPush(MOFKEY_LEFT) ||
+		m_SelectBtnLeft_1.IsPull())
 	{
 		m_TruckIndex--;
 	}
-	if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+	if (g_pInput->IsKeyPush(MOFKEY_RIGHT) ||
+		m_SelectBtnRight_1.IsPull())
 	{
 		m_TruckIndex++;
+	}
+	if (m_SelectBtnLeft_2.IsPull())
+	{
+		m_TruckIndex -= 5;
+	}
+	if (m_SelectBtnRight_2.IsPull())
+	{
+		m_TruckIndex += 5;
 	}
 
 	// セレクト数が曲数を超えないようにする。
@@ -200,13 +216,6 @@ void CSelectScene::Render(void) const
 			g_MusicData[musicNo].title.c_str()
 		);
 	}
-	
-	// 各ボタンの描画。
-	m_SelectBtnDown.Render();
-	m_SelectBtnUp.Render();
-	m_PlayBtn.Render();
-	m_PlayAutoBtn.Render();
-	m_SetBtn.Render();
 
 	// 情報の描画。
 	Vector2    infoPos(SceneWidth * 0.5f + 30, 110);
@@ -222,7 +231,11 @@ void CSelectScene::Render(void) const
 
 	int truckNo  = g_MusicData[g_MusicSelect].trucks[m_TruckIndex];
 	int truckCnt = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray().GetArrayCount();
-	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "TrackNo   : %02u", truckNo);
+	const ScoreKey& scoreKey = ScoreKey(g_MusicData[g_MusicSelect].title.c_str(), truckNo);
+	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 6, "HiScore   : %d", CScoreManager::GetScoreValue(scoreKey));
+	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 5, "MaxCombo  : %d", CScoreManager::GetScore(scoreKey).GetMaxCombo());
+	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "TrackNo   : ");
+	m_pInfoFont->RenderFormatString(m_SelectBtnLeft_1.GetRect().Right + 30, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "%02u", truckNo);
 	
 	// トラックが存在するか確認する。
 	if (truckNo >= truckCnt)
@@ -235,6 +248,17 @@ void CSelectScene::Render(void) const
 		m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 2, "TrackName : %s"  , g_NoteArray[g_MusicSelect].GetSMFData().GetTrackNameArray()[truckNo].GetString());
 		m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 1, "MaxCombo  : %d"  , combCnt / 2);
 	}
+
+	// 各ボタンの描画。
+	m_SelectBtnDown.Render();
+	m_SelectBtnUp.Render();
+	m_PlayBtn.Render();
+	m_PlayAutoBtn.Render();
+	m_SetBtn.Render();
+	m_SelectBtnLeft_1.Render();
+	m_SelectBtnLeft_2.Render();
+	m_SelectBtnRight_1.Render();
+	m_SelectBtnRight_2.Render();
 }
 
 int CSelectScene::LoopMusicNo(const int& offset) const

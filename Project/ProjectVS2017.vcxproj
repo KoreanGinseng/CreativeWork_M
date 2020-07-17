@@ -105,6 +105,7 @@
     <ClCompile Include="MIDIOut.cpp" />
     <ClCompile Include="Note.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="SMFData.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="picojson.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Setting.h" />
     <ClInclude Include="SMFData.h" />

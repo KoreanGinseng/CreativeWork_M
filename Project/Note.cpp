@@ -22,7 +22,8 @@ namespace sip
 		m_bStart(false),
 		m_bShow(false),
 		m_bBlack(false),
-		m_bPlayTrack(false)
+		m_bPlayTrack(false),
+		m_pScore(nullptr)
 	{
 	}
 
@@ -205,6 +206,10 @@ namespace sip
 			g_PlayResult.miss++;
 			g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
 			g_PlayResult.combo = 0;
+			if (m_pScore)
+			{
+				m_pScore->AddScore(ScoreNoteMiss);
+			}
 			m_bCheck = true;
 			return;
 		}
@@ -235,6 +240,7 @@ namespace sip
 				g_PlayResult.perfect++;
 				g_PlayResult.combo++;
 				g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
+				m_pScore->AddScore(ScoreNoteParfect);
 				m_bCheck = true;
 			}
 			else if (checkTime <= GreatTime / 2.0f)
@@ -244,6 +250,7 @@ namespace sip
 				g_PlayResult.great++;
 				g_PlayResult.combo++;
 				g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
+				m_pScore->AddScore(ScoreNoteGreat);
 				m_bCheck = true;
 			}
 			else if (checkTime <= GoodTime / 2.0f)
@@ -253,6 +260,7 @@ namespace sip
 				g_PlayResult.good++;
 				g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
 				g_PlayResult.combo = 0;
+				m_pScore->AddScore(ScoreNoteGood);
 				m_bCheck = true;
 			}
 			else if (checkTime <= BadTime / 2.0f)
@@ -262,6 +270,7 @@ namespace sip
 				g_PlayResult.bad++;
 				g_PlayResult.maxCombo = MOF_MAX(g_PlayResult.combo, g_PlayResult.maxCombo);
 				g_PlayResult.combo = 0;
+				m_pScore->AddScore(ScoreNoteBad);
 				m_bCheck = true;
 			}
 		}
@@ -280,6 +289,11 @@ namespace sip
 	void CNote::SetPlayTrack(const bool & b)
 	{
 		m_bPlayTrack = b;
+	}
+
+	void CNote::SetScore(CScore * pScore)
+	{
+		m_pScore = pScore;
 	}
 
 	bool CNote::IsStart(void) const
@@ -357,7 +371,7 @@ namespace sip
 		return m_SMFData.Load(pName);
 	}
 
-	void CNoteArray::Initialize(const int& trackNo)
+	void CNoteArray::Initialize(const int& trackNo, CScore* pScore)
 	{
 		// 演奏するトラックの情報取得。
 		m_TrackNo = trackNo;
@@ -371,6 +385,7 @@ namespace sip
 		{
 			m_NoteArray.Add(CNote(initArray[i]));
 			m_NoteArray[i].SetPlayTrack(true);
+			m_NoteArray[i].SetScore(pScore);
 		}
 
 		// ほかのトラックに演奏情報がある場合の自動演奏設定。

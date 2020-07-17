@@ -51,8 +51,5 @@ void CTitle::Update(void)
 
 void CTitle::Render(void) const
 {
-	CGraphicsUtilities::RenderString(0,  0, "Title");
-	CGraphicsUtilities::RenderString(0, 30, "Enterキーでセレクト画面へ");
-
 	m_pTitleTexture->RenderScaleRotate(SceneWidth * 0.5f, SceneHeight * 0.5f, m_Scale, m_Rotate, TEXALIGN_CENTERCENTER);
 }

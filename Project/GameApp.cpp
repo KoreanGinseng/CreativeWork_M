@@ -109,6 +109,12 @@ bool StartLoad(void)
 		}
 	}
 
+	// スコアの読み込み。
+	if (!CScoreManager::Load("Score.score"))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -213,6 +219,10 @@ MofBool CGameApp::Render(void) {
 		PostQuitMessage(2);
 	}
 
+	//Vector2 mp;
+	//g_pInput->GetMousePos(mp);
+	//CGraphicsUtilities::RenderString(0, 0, "%.f,%.f", mp.x, mp.y);
+
 	//描画の終了
 	g_pGraphics->RenderEnd();
 	return TRUE;
@@ -230,6 +240,8 @@ MofBool CGameApp::Release(void) {
 	CTextureAsset::Release();
 	CMeshAsset::Release();
 	CSoundAsset::Release();
+
+	CScoreManager::Save("Score.score");
 
 	return TRUE;
 }

@@ -11,6 +11,10 @@ private:
 	CButton                      m_PlayBtn;
 	CButton                      m_PlayAutoBtn;
 	CButton                      m_SetBtn;
+	CButton                      m_SelectBtnLeft_1;
+	CButton                      m_SelectBtnLeft_2;
+	CButton                      m_SelectBtnRight_1;
+	CButton                      m_SelectBtnRight_2;
 							     
 	std::shared_ptr<CTexture>    m_pSelect1Texture;
 	std::shared_ptr<CTexture>    m_pSelect2Texture;

@@ -3,6 +3,7 @@
 #include "MIDIOut.h"
 #include "StopWatch.h"
 #include "SMFData.h"
+#include "Score.h"
 
 namespace sip
 {
@@ -34,13 +35,23 @@ namespace sip
 		None
 	};
 
-	constexpr float PerfectTime = 0.033f;
+	constexpr float PerfectTime      = 0.033f;
+								     
+	constexpr float GreatTime        = 0.150f;
+								     
+	constexpr float GoodTime         = 0.350f;
+								     
+	constexpr float BadTime          = 0.783f;
 
-	constexpr float GreatTime   = 0.150f;
-	
-	constexpr float GoodTime    = 0.350f;
-
-	constexpr float BadTime     = 0.783f;
+	constexpr int   ScoreNoteParfect =   1000;
+				    
+	constexpr int   ScoreNoteGreat   =    800;
+				    
+	constexpr int   ScoreNoteGood    =    500;
+				    
+	constexpr int   ScoreNoteBad     =    200;
+				    
+	constexpr int   ScoreNoteMiss    =      0;
 
 	class CNote
 	{
@@ -77,6 +88,8 @@ namespace sip
 
 		MofU8       m_Channel;
 
+		CScore*     m_pScore;
+
 		static NoteHitResult m_sHitResult;
 
 		static Auto          m_sAutoParam;
@@ -110,6 +123,8 @@ namespace sip
 		void SetChannel(const MofU8& channel);
 
 		void SetPlayTrack(const bool& b);
+
+		void SetScore(CScore* pScore);
 
 		bool IsStart(void) const;
 
@@ -167,7 +182,7 @@ namespace sip
 
 		bool Load(LPCMofChar pName);
 
-		void Initialize(const int& trackNo);
+		void Initialize(const int& trackNo, CScore* pScore);
 
 		void Update(void);
 
