@@ -35,7 +35,7 @@ CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 	m_SelectBtnRight_1.SetTexture(TextureAsset("ArrowRight_1"));
 	m_SelectBtnRight_2.SetTexture(TextureAsset("ArrowRight_2"));
 
-	m_TruckIndex    = 0;
+	m_TruckIndex      = 0;
 
 	m_pSelect1Texture = TextureAsset("Select_1");
 	m_pSelect2Texture = TextureAsset("Select_2");
@@ -45,18 +45,14 @@ CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 
 	m_ArrowMotion.Start();
 
-	m_Scale    = 1.0f;
-	m_Rotate   = 0.0f;
-	m_pTitleTexture = TextureAsset("Title");
-
-	m_ScaleMotion << CEaseMotion<float>(1.0f, 1.2f, Ease::InOut, EaseType::Sine, 0.5f);
-	m_ScaleMotion << CEaseMotion<float>(1.2f, 1.0f, Ease::InOut, EaseType::Sine, 0.5f);
-
-	m_ScaleMotion.Start();
+	SoundAsset("BGM_Select")->SetLoop(TRUE);
+	SoundAsset("BGM_Select")->Play();
+	SoundAsset("BGM_Select")->SetVolume(0.1f);
 }
 
 CSelectScene::~CSelectScene(void)
 {
+	SoundAsset("BGM_Select")->Stop();
 }
 
 void CSelectScene::Update(void)
@@ -82,30 +78,20 @@ void CSelectScene::Update(void)
 		GetData().trackNo = g_MusicData[g_MusicSelect].trucks[m_TruckIndex];
 		GetData().channel = GetData().trackNo;
 		GetData().autoParam = m_PlayAutoBtn.IsPull() ? Auto::All : Auto::Semi;
+
+		SoundAsset("SE_Enter")->Play();
 		ChangeScene(SceneName::Game);
 	}
 
 	// 設定画面へ。
 	if (m_SetBtn.IsPull())
 	{
+		SoundAsset("SE_Enter")->Play();
 		ChangeScene(SceneName::Setting);
 	}
 
 	// 背景の更新。
-	m_ScaleMotion.Update();
-
-	m_Scale = m_ScaleMotion.GetValue();
-
-	// ループさせる。
-	if (m_ScaleMotion.IsEnd())
-	{
-		m_ScaleMotion.Reset();
-		m_ScaleMotion.Start();
-	}
-
-	m_Rotate += 0.01f;
-
-	m_Rotate = MOF_NORMALIZE_RADIANANGLE(m_Rotate);
+	m_BackRender.Update();
 
 	// 矢印のふわふわするモーションの更新。
 	m_ArrowMotion.Update();
@@ -126,7 +112,9 @@ void CSelectScene::Update(void)
 	{
 		int max  = g_MusicData.GetArrayCount();
 
-		g_MusicSelect += wheelMove;
+		g_MusicSelect -= wheelMove;
+
+		SoundAsset("SE_Select")->Play();
 
 		// ロールする処理。
 		if (g_MusicSelect < 0)
@@ -144,6 +132,9 @@ void CSelectScene::Update(void)
 		m_SelectBtnUp.IsPull())
 	{
 		g_MusicSelect--;
+		
+		SoundAsset("SE_Select")->Play();
+
 		if (g_MusicSelect < 0)
 		{
 			g_MusicSelect = g_MusicData.GetArrayCount() - 1;
@@ -153,6 +144,9 @@ void CSelectScene::Update(void)
 		m_SelectBtnDown.IsPull())
 	{
 		g_MusicSelect++;
+
+		SoundAsset("SE_Select")->Play();
+		
 		if (g_MusicSelect > g_MusicData.GetArrayCount() - 1)
 		{
 			g_MusicSelect = 0;
@@ -164,19 +158,23 @@ void CSelectScene::Update(void)
 		m_SelectBtnLeft_1.IsPull())
 	{
 		m_TruckIndex--;
+		SoundAsset("SE_Select")->Play();
 	}
 	if (g_pInput->IsKeyPush(MOFKEY_RIGHT) ||
 		m_SelectBtnRight_1.IsPull())
 	{
 		m_TruckIndex++;
+		SoundAsset("SE_Select")->Play();
 	}
 	if (m_SelectBtnLeft_2.IsPull())
 	{
 		m_TruckIndex -= 5;
+		SoundAsset("SE_Select")->Play();
 	}
 	if (m_SelectBtnRight_2.IsPull())
 	{
 		m_TruckIndex += 5;
+		SoundAsset("SE_Select")->Play();
 	}
 
 	// セレクト数が曲数を超えないようにする。
@@ -186,7 +184,7 @@ void CSelectScene::Update(void)
 
 void CSelectScene::Render(void) const
 {
-	m_pTitleTexture->RenderScaleRotate(SceneWidth * 0.5f, SceneHeight * 0.5f, m_Scale, m_Rotate, MOF_ALPHA_WHITE(128), TEXALIGN_CENTERCENTER);
+	m_BackRender.Render();
 
 	for (int i = -2; i <= 2; i++)
 	{
@@ -244,8 +242,10 @@ void CSelectScene::Render(void) const
 	}
 	else
 	{
-		int combCnt  = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[truckNo].GetArrayCount();
-		m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 2, "TrackName : %s"  , g_NoteArray[g_MusicSelect].GetSMFData().GetTrackNameArray()[truckNo].GetString());
+		int combCnt     = g_NoteArray[g_MusicSelect].GetSMFData().GetNoteArray()[truckNo].GetArrayCount();
+		int length      = g_NoteArray[g_MusicSelect].GetSMFData().GetTrackNameArray()[truckNo].GetLength();
+		std::string str = length <= 0 ? "noname" : g_NoteArray[g_MusicSelect].GetSMFData().GetTrackNameArray()[truckNo].GetString();
+		m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 2, "TrackName : %s"  , str.c_str());
 		m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 1, "MaxCombo  : %d"  , combCnt / 2);
 	}
 

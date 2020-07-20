@@ -115,6 +115,28 @@ bool StartLoad(void)
 		return false;
 	}
 
+	// BGM、SEをアセットに登録する。
+	if (!CSoundAsset::Load("BGM_Title", "BGM/やっぱりナゾナゾマン.mp3"))
+	{
+		return false;
+	}
+	if (!CSoundAsset::Load("BGM_Select", "BGM/ぽかぽか散歩道_2.mp3"))
+	{
+		return false;
+	}
+	if (!CSoundAsset::Load("BGM_Result", "BGM/気分UP.mp3"))
+	{
+		return false;
+	}
+	if (!CSoundAsset::Load("SE_Select", "SE/select.mp3"))
+	{
+		return false;
+	}
+	if (!CSoundAsset::Load("SE_Enter", "SE/enter.mp3"))
+	{
+		return false;
+	}
+
 	return true;
 }
 

@@ -9,9 +9,26 @@ CTitle::CTitle(const CTitle::InitData & init) :
 	m_Rotate   = 0.0f;
 	m_pTitleTexture = TextureAsset("Title");
 
-	m_ScaleMotion << CEaseMotion<float>(1.0f, 0.8f, Ease::Out, EaseType::Sine, 0.2f);
-	m_ScaleMotion << CEaseMotion<float>(0.8f, 1.4f, Ease::Out, EaseType::Sine, 0.3f);
-	m_ScaleMotion << CEaseMotion<float>(1.4f, 1.0f, Ease::In , EaseType::Sine, 0.2f);
+	SoundAsset("BGM_Title")->SetLoop(TRUE);
+	SoundAsset("BGM_Title")->Play();
+	SoundAsset("BGM_Title")->SetVolume(0.3f);
+
+	for (int i = 0; i < 30; i++)
+	{
+		m_BackIconRotate[i] = MOF_ToRadian(CUtilities::Random(0, 360));
+		int x = CUtilities::Random(1000, 1800);
+		int y = CUtilities::Random( 200,  500);
+		if (x < SceneWidth)
+		{
+			y = -CUtilities::Random(200, 500);
+		}
+		m_BackIconPos[i]      = Vector2(x, y);
+		m_pBackIconTexture[i] = TextureAsset(TextureData[TexName::Kirin_1 + CUtilities::Random(3)].first);
+	}
+
+	m_ScaleMotion << CEaseMotion<float>(1.0f, 0.8f, Ease::Out, EaseType::Sine, 0.3f);
+	m_ScaleMotion << CEaseMotion<float>(0.8f, 1.4f, Ease::Out, EaseType::Sine, 0.4f);
+	m_ScaleMotion << CEaseMotion<float>(1.4f, 1.0f, Ease::In , EaseType::Sine, 0.3f);
 
 	m_ScaleMotion.Start();
 }
@@ -19,6 +36,7 @@ CTitle::CTitle(const CTitle::InitData & init) :
 CTitle::~CTitle(void)
 {
 	// ‰ð•úˆ—
+	SoundAsset("BGM_Title")->Stop();
 }
 
 void CTitle::Update(void)
@@ -29,6 +47,7 @@ void CTitle::Update(void)
 		(CCircle(SceneWidth * 0.5f, SceneHeight * 0.5f, m_pTitleTexture->GetWidth() * 0.5f * m_Scale).CollisionPoint(mp) &&
 		g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON)))
 	{
+		SoundAsset("SE_Enter")->Play();
 		ChangeScene(SceneName::Select);
 	}
 
@@ -46,10 +65,35 @@ void CTitle::Update(void)
 
 	m_Rotate += 0.01f;
 
+	for (int i = 0; i < 30; i++)
+	{
+		m_BackIconRotate[i] += 0.01f;
+		m_BackIconPos[i] += Vector2(-4, 3);
+
+		if (m_BackIconPos[i].x + 200 < 0 ||
+			m_BackIconPos[i].y - 100 > SceneHeight)
+		{
+			m_BackIconRotate[i] = MOF_ToRadian(CUtilities::Random(0, 360));
+			int x = CUtilities::Random(1000, 1500);
+			int y = CUtilities::Random( 200,  500);
+			if (x < SceneWidth)
+			{
+				y = -CUtilities::Random(200, 500);
+			}
+			m_BackIconPos[i]      = Vector2(x, y);
+			m_pBackIconTexture[i] = TextureAsset(TextureData[TexName::Kirin_1 + CUtilities::Random(3)].first);
+		}
+	}
+
 	m_Rotate = MOF_NORMALIZE_RADIANANGLE(m_Rotate);
 }
 
 void CTitle::Render(void) const
 {
+	for (int i = 0; i < 30; i++)
+	{
+		m_pBackIconTexture[i]->RenderScaleRotate(m_BackIconPos[i].x, m_BackIconPos[i].y, 0.5f, m_BackIconRotate[i], MOF_ALPHA_WHITE(128), TEXALIGN_CENTERCENTER);
+	}
+
 	m_pTitleTexture->RenderScaleRotate(SceneWidth * 0.5f, SceneHeight * 0.5f, m_Scale, m_Rotate, TEXALIGN_CENTERCENTER);
 }

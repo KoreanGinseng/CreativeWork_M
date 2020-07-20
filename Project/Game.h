@@ -36,5 +36,4 @@ public:
 	static void RenderWhiteKey(const PianoKey& offset, const KeyLength& length);
 
 	static void RenderBlackKey(void);
-
 };

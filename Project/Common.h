@@ -60,6 +60,8 @@ struct PlayResult
 
 	MofU32      maxCombo = 0;
 
+	MofU32      score    = 0;
+
 	void Clear(void)
 	{
 		perfect  = 0;
@@ -69,6 +71,7 @@ struct PlayResult
 		miss     = 0;
 		combo    = 0;
 		maxCombo = 0;
+		score    = 0;
 	}
 };
 
@@ -87,6 +90,10 @@ enum TexName
 	ArrowLeft_2,
 	ArrowRight_1,
 	ArrowRight_2,
+	Kirin_1,
+	Kirin_2,
+	Kirin_3,
+	Kirin_4,
 	TexNameCount,
 };
 
@@ -104,6 +111,10 @@ constexpr std::pair<char*, char*> TextureData[] =
 	std::pair<char*, char*>("ArrowLeft_2" , "img/ArrowLeft_2.png" ),
 	std::pair<char*, char*>("ArrowRight_1", "img/ArrowRight_1.png"),
 	std::pair<char*, char*>("ArrowRight_2", "img/ArrowRight_2.png"),
+	std::pair<char*, char*>("Kirin_1"     , "img/Kirin_1.png"     ),
+	std::pair<char*, char*>("Kirin_2"     , "img/Kirin_2.png"     ),
+	std::pair<char*, char*>("Kirin_3"     , "img/Kirin_3.png"     ),
+	std::pair<char*, char*>("Kirin_4"     , "img/Kirin_4.png"     ),
 };
 
 

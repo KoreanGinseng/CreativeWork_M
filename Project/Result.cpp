@@ -3,10 +3,14 @@
 CResult::CResult(const CResult::InitData & init) :
 	MyApp::CScene::IScene(init)
 {
+	SoundAsset("BGM_Result")->SetLoop(TRUE);
+	SoundAsset("BGM_Result")->Play();
+	SoundAsset("BGM_Result")->SetVolume(0.3f);
 }
 
 CResult::~CResult(void)
 {
+	SoundAsset("BGM_Result")->Stop();
 }
 
 void CResult::Update(void)
@@ -14,12 +18,17 @@ void CResult::Update(void)
 	// エンターキーでセレクト画面へ。
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
+		SoundAsset("SE_Enter")->Play();
 		ChangeScene(SceneName::Select);
 	}
+
+	m_BackRender.Update();
 }
 
 void CResult::Render(void) const
 {
+	m_BackRender.Render();
+
 	CGraphicsUtilities::RenderString(0, 0, "Result");
 
 	CGraphicsUtilities::RenderString(0,  30, "PERFECT  : %05d", g_PlayResult.perfect);

@@ -14,6 +14,12 @@ private:
 
 	CEaseMotionController<float> m_ScaleMotion;
 
+	float                        m_BackIconRotate[30];
+
+	Vector2                      m_BackIconPos[30];
+
+	std::shared_ptr<CTexture>    m_pBackIconTexture[30];
+
 public:
 	
 	explicit CTitle(const CTitle::InitData& init);

@@ -52,8 +52,8 @@ CGame::CGame(const CGame::InitData & init) :
 	m_ScoreKey = std::pair<std::string, int>(pMusicData->title.c_str(), GetData().trackNo);
 
 	// モーションの作成。
-	m_ComboMotion << CEaseMotion<float>( 0.0f, -5.0f, Ease::Out, EaseType::Expo, 0.1f);
-	m_ComboMotion << CEaseMotion<float>(-5.0f,  0.0f, Ease::In , EaseType::Expo, 0.1f);
+	m_ComboMotion << CEaseMotion<float>( 0.0f, -5.0f, Ease::Out, EaseType::Expo, 0.25f);
+	m_ComboMotion << CEaseMotion<float>(-5.0f,  0.0f, Ease::In , EaseType::Expo, 0.25f);
 
 	// タイマーをスタートさせる。
 	m_StartTime.Start();
@@ -85,6 +85,7 @@ void CGame::Update(void)
 	if (m_StartTime.GetTime() > m_EndTime)
 	{
 		// スコアの更新判定。
+		g_PlayResult.score = m_Score.GetScore();
 		int prev = CScoreManager::GetScoreValue(m_ScoreKey);
 		int now = m_Score.GetScore();
 		if (prev < now)
@@ -328,3 +329,4 @@ void CGame::RenderBlackKey(void)
 		);
 	}
 }
+

@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Button.h"
+#include "BackRender.h"
 
 class CSelectScene : public MyApp::CScene
 {
@@ -26,13 +27,7 @@ private:
 
 	CEaseMotionController<float> m_ArrowMotion;
 
-	float                        m_Scale;
-
-	float                        m_Rotate;
-
-	std::shared_ptr<CTexture>    m_pTitleTexture;
-
-	CEaseMotionController<float> m_ScaleMotion;
+	CBackRender                  m_BackRender;
 
 public:
 

@@ -1,8 +1,13 @@
 #pragma once
 #include "Common.h"
+#include "BackRender.h"
 
 class CResult : public MyApp::CScene
 {
+private:
+
+	CBackRender m_BackRender;
+
 public:
 
 	explicit CResult(const CResult::InitData& init);
