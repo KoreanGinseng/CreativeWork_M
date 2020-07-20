@@ -115,6 +115,9 @@ namespace sip
 			// 音色情報を追加していく。
 			m_InstrumentArray.Add((MofU8)0x00);
 
+			// トラック名情報を追加。
+			m_TrackNameArray.Add("");
+
 			// 必要な情報だけを保存していくぜ！！
 			TrackDataAnalysis(pTrackData[i].pData, pTrackData[i].dataSize, hcd, i);
 
@@ -332,7 +335,7 @@ namespace sip
 					pText[length] = '\0';
 
 					// 文字列を保存する。
-					m_TrackNameArray.Add(pText);
+					m_TrackNameArray[noteArrayCount] = (pText);
 
 					// メモリ確保したら解放もする。
 					if (length > 1)
