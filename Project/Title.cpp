@@ -86,6 +86,12 @@ void CTitle::Update(void)
 	}
 
 	m_Rotate = MOF_NORMALIZE_RADIANANGLE(m_Rotate);
+
+	// DEBUG : リザルト画面作成用ショートカットキー
+	if (g_pInput->IsKeyPush(MOFKEY_6))
+	{
+		ChangeScene(SceneName::Result);
+	}
 }
 
 void CTitle::Render(void) const

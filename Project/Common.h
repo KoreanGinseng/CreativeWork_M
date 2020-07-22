@@ -79,6 +79,8 @@ struct PlayResult
 enum TexName
 {
 	Title,
+	Back_1,
+	Back_2,
 	Play,
 	PlayAuto,
 	Select_1,
@@ -100,6 +102,8 @@ enum TexName
 constexpr std::pair<char*, char*> TextureData[] =
 {
 	std::pair<char*, char*>("Title"       , "img/Title.png"       ),
+	std::pair<char*, char*>("Back_1"      , "img/Back_1.png"      ),
+	std::pair<char*, char*>("Back_2"      , "img/Back_2.png"      ),
 	std::pair<char*, char*>("Play"        , "img/Play.png"        ),
 	std::pair<char*, char*>("PlayAuto"    , "img/PlayAuto.png"    ),
 	std::pair<char*, char*>("Select_1"    , "img/Select_1.png"    ),

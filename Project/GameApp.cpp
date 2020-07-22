@@ -99,6 +99,10 @@ bool StartLoad(void)
 	{
 		return false;
 	}
+	if (!CFontAsset::Load("Result", "UD デジタル 教科書体 NK-B"))
+	{
+		return false;
+	}
 
 	// 各画像をアセットに登録する。
 	for (auto& itr : TextureData)
