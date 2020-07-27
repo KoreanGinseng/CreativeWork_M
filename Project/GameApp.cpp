@@ -168,25 +168,12 @@ MofBool CGameApp::Initialize(void) {
 	CUtilities::SetCurrentDirectory("Resource");
 
 	// ロードシーン用に起動時に最小限だけを読み込みしておく。
-	if (!CTextureAsset::Load(TextureData[TexName::Title].first, TextureData[TexName::Title].second))
+	for (int i = TexName::Title; i <= TexName::Kirin_4; i++)
 	{
-		return FALSE;
-	}
-	if (!CTextureAsset::Load(TextureData[TexName::Kirin_1].first, TextureData[TexName::Kirin_1].second))
-	{
-		return FALSE;
-	}
-	if (!CTextureAsset::Load(TextureData[TexName::Kirin_2].first, TextureData[TexName::Kirin_2].second))
-	{
-		return FALSE;
-	}
-	if (!CTextureAsset::Load(TextureData[TexName::Kirin_3].first, TextureData[TexName::Kirin_3].second))
-	{
-		return FALSE;
-	}
-	if (!CTextureAsset::Load(TextureData[TexName::Kirin_4].first, TextureData[TexName::Kirin_4].second))
-	{
-		return FALSE;
+		if (!CTextureAsset::Load(TextureData[i].first, TextureData[i].second))
+		{
+			return FALSE;
+		}
 	}
 	if (!CFontAsset::Load("Info", "ＭＳ 明朝"))
 	{
