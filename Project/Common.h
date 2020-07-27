@@ -46,6 +46,7 @@ struct MusicData
 	std::string        fileName;
 	float              fallSpd;
 	std::vector<MofU8> trucks;
+	std::vector<MofU8> instruments;
 };
 
 struct PlayResult

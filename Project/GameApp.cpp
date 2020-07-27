@@ -75,6 +75,14 @@ bool StartLoad(void)
 						md.trucks.push_back(truckArray[tc].get<double>());
 					}
 				}
+				if (s.first == "instruments")
+				{
+					picojson::array instrumentArray = s.second.get<picojson::array>();
+					for (int ic = 0; ic < instrumentArray.size(); ic++)
+					{
+						md.instruments.push_back(instrumentArray[ic].get<double>());
+					}
+				}
 			}
 			g_MusicData.Add(md);
 			g_NoteArray.Add();

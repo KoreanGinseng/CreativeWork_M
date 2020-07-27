@@ -41,6 +41,13 @@ CGame::CGame(const CGame::InitData & init) :
 	int   size     = pNoteDataArray->GetArrayCount();
 	float fallTime = CheckLineY / pNoteArray->GetFallSpeed();
 	m_EndTime      = pNoteDataArray->GetData(size - 1).eventTime / 1000.0f + fallTime + 3.0f;
+
+	// 音色変更の適応。
+	for (int i = 0; i < pMusicData->trucks.size(); i++)
+	{
+		GMInstrument instrument = static_cast<GMInstrument>(pMusicData->instruments[i]);
+		g_MidiOutput.ChangeInstrument(instrument, pMusicData->trucks[i]);
+	}
 	
 	// DEBUG : ノーツが落ちてくる秒数をデバッグプリントする。(確認用)
 	for (int i = 0; i < pNoteArray->GetNoteArray().GetArrayCount(); i++)

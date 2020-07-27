@@ -20,7 +20,7 @@ CTitle::CTitle(const CTitle::InitData & init) :
 		int y = CUtilities::Random( 200,  500);
 		if (x < SceneWidth)
 		{
-			y = -CUtilities::Random(200, 500);
+			y = -static_cast<int>(CUtilities::Random(200, 500));
 		}
 		m_BackIconPos[i]      = Vector2(x, y);
 		m_pBackIconTexture[i] = TextureAsset(TextureData[TexName::Kirin_1 + CUtilities::Random(3)].first);
@@ -78,7 +78,7 @@ void CTitle::Update(void)
 			int y = CUtilities::Random( 200,  500);
 			if (x < SceneWidth)
 			{
-				y = -CUtilities::Random(200, 500);
+				y = -static_cast<int>(CUtilities::Random(200, 500));
 			}
 			m_BackIconPos[i]      = Vector2(x, y);
 			m_pBackIconTexture[i] = TextureAsset(TextureData[TexName::Kirin_1 + CUtilities::Random(3)].first);
