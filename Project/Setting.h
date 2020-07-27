@@ -37,5 +37,13 @@ public:
 
 	virtual void Render(void) const override;
 
+	static void Save(void);
+
+	static bool Load(void);
+
+	static KeyLength& GetKeyLength(void);
+
+	static PianoKey& GetKeyOffset(void);
+
 };
 

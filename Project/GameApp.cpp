@@ -103,10 +103,6 @@ bool StartLoad(void)
 	{
 		return false;
 	}
-	if (!CFontAsset::Load("Info", "ＭＳ 明朝"))
-	{
-		return false;
-	}
 	if (!CFontAsset::Load("Result", "UD デジタル 教科書体 NK-B"))
 	{
 		return false;
@@ -123,6 +119,11 @@ bool StartLoad(void)
 
 	// スコアの読み込み。
 	if (!CScoreManager::Load("Score.score"))
+	{
+		return false;
+	}
+	// 設定の読み込み。
+	if (!CSetting::Load())
 	{
 		return false;
 	}
@@ -149,6 +150,8 @@ bool StartLoad(void)
 		return false;
 	}
 
+	//Sleep(10000);
+
 	return true;
 }
 
@@ -163,6 +166,32 @@ MofBool CGameApp::Initialize(void) {
 
 	// 素材フォルダの指定。
 	CUtilities::SetCurrentDirectory("Resource");
+
+	// ロードシーン用に起動時に最小限だけを読み込みしておく。
+	if (!CTextureAsset::Load(TextureData[TexName::Title].first, TextureData[TexName::Title].second))
+	{
+		return FALSE;
+	}
+	if (!CTextureAsset::Load(TextureData[TexName::Kirin_1].first, TextureData[TexName::Kirin_1].second))
+	{
+		return FALSE;
+	}
+	if (!CTextureAsset::Load(TextureData[TexName::Kirin_2].first, TextureData[TexName::Kirin_2].second))
+	{
+		return FALSE;
+	}
+	if (!CTextureAsset::Load(TextureData[TexName::Kirin_3].first, TextureData[TexName::Kirin_3].second))
+	{
+		return FALSE;
+	}
+	if (!CTextureAsset::Load(TextureData[TexName::Kirin_4].first, TextureData[TexName::Kirin_4].second))
+	{
+		return FALSE;
+	}
+	if (!CFontAsset::Load("Info", "ＭＳ 明朝"))
+	{
+		return FALSE;
+	}
 
 	// 各シーンの追加と、フェード色の設定。
 	m_SceneManager
@@ -276,6 +305,7 @@ MofBool CGameApp::Release(void) {
 	CSoundAsset::Release();
 
 	CScoreManager::Save("Score.score");
+	CSetting::Save();
 
 	return TRUE;
 }

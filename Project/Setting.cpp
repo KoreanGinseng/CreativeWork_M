@@ -34,6 +34,8 @@ CSetting::CSetting(const InitData & init) :
 
 CSetting::~CSetting(void)
 {
+	GetKeyLength() = GetData().keyLength;
+	GetKeyOffset() = GetData().offsetKey;
 }
 
 void CSetting::Update(void)
@@ -189,4 +191,51 @@ void CSetting::Render(void) const
 	float offsety = CMIDIInput::IsBlackKey(GetData().offsetKey) ? 670 : 710;
 	CCircle redc(Vector2(PianoRollOffsetX + offsetx, offsety), 5);
 	CGraphicsUtilities::RenderFillCircle(redc, MOF_COLOR_RED);
+}
+
+void CSetting::Save(void)
+{
+	FILE* fp;
+	fp = fopen("Config.config", "wt");
+
+	if (fp == NULL)
+	{
+		return;
+	}
+
+	fprintf(fp, "%d,%d,", GetKeyLength(), GetKeyOffset());
+
+	fclose(fp);
+}
+
+bool CSetting::Load(void)
+{
+	FILE* fp;
+	fp = fopen("Config.config", "rt");
+
+	if (fp == NULL)
+	{
+		return false;
+	}
+	int length = 0, key = 0;
+	fscanf(fp, "%d,%d,", &length, &key);
+
+	GetKeyLength() = static_cast<KeyLength>(length);
+	GetKeyOffset() = static_cast<PianoKey>(key);
+
+	fclose(fp);
+
+	return true;
+}
+
+KeyLength & CSetting::GetKeyLength(void)
+{
+	static KeyLength length;
+	return length;
+}
+
+PianoKey & CSetting::GetKeyOffset(void)
+{
+	static PianoKey key;
+	return key;
 }

@@ -26,8 +26,6 @@ enum class SceneName
 // 各シーン共通のデータ
 struct GameData 
 {
-	float                     fallSpeed =           5.0f;
-			                  
 	KeyLength                 keyLength = KeyLength::_88;
 			                  
 	Auto                      autoParam =     Auto::Semi;
