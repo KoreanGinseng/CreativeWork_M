@@ -28,5 +28,7 @@ public:
 	void Update(void);
 
 	void Render(void) const;
+
+	static void RenderBackBoard(const Vector2& centerPos, const Vector2& scale, const MofU32& color);
 };
 

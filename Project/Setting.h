@@ -1,19 +1,31 @@
 #pragma once
 #include "Common.h"
 #include "Button.h"
+#include "BackRender.h"
+
+constexpr int ArrowOffsetX = (SceneWidth / 2) + 30;
+constexpr int ArrowOffsetY =                    60;
+constexpr int ArrowSize    =                    60;
 
 class CSetting : public MyApp::CScene
 {
 private:
 
-	int m_Select;
+	CButton                 m_SelectLeft_1_1;
+	CButton                 m_SelectLeft_1_2;
+	CButton                 m_SelectRight_1_1;
+	CButton                 m_SelectRight_1_2;
+				            
+	CButton                 m_SelectLeft_2_1;
+	CButton                 m_SelectLeft_2_2;
+	CButton                 m_SelectRight_2_1;
+	CButton                 m_SelectRight_2_2;
+				            
+	CButton                 m_Back;
+				            
+	CBackRender             m_BackRender;
 
-	CButton m_SelectUp;
-	CButton m_SelectDown;
-	CButton m_SelectLeft;
-	CButton m_SelectRight;
-	CButton m_Start;
-	CButton m_Back;
+	std::shared_ptr<CFontA> m_pFont;
 
 public:
 

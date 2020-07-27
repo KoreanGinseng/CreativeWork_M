@@ -77,3 +77,21 @@ void CBackRender::Render(void) const
 
 	m_pTitleTexture->RenderScaleRotate(SceneWidth * 0.5f, SceneHeight * 0.5f, m_Scale, m_Rotate, MOF_ALPHA_WHITE(128), TEXALIGN_CENTERCENTER);
 }
+
+void CBackRender::RenderBackBoard(const Vector2& centerPos, const Vector2& scale, const MofU32& color)
+{
+	g_pGraphics->SetStencilEnable(TRUE);
+	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_ALWAYS, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR);
+
+	g_pGraphics->SetColorWriteEnable(FALSE);
+	TextureAsset("Back_1")->RenderScale(centerPos.x, centerPos.y, scale.x, scale.y, TEXALIGN_CENTERCENTER);
+	g_pGraphics->SetColorWriteEnable(TRUE);
+
+	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_LESS, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP);
+
+	Vector2 texSize(TextureAsset("Back_1")->GetWidth() * scale.x, TextureAsset("Back_1")->GetHeight() * scale.y);
+	CRectangle rect(centerPos.x - texSize.x, centerPos.y - texSize.y, centerPos.x + texSize.x, centerPos.y + texSize.y);
+	CGraphicsUtilities::RenderFillRect(rect, color);
+
+	g_pGraphics->SetStencilEnable(FALSE);
+}

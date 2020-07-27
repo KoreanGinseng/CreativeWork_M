@@ -7,7 +7,6 @@ CResult::CResult(const CResult::InitData & init) :
 	SoundAsset("BGM_Result")->Play();
 	SoundAsset("BGM_Result")->SetVolume(0.3f);
 
-	m_pTexture = TextureAsset("Back_1");
 	m_pFont    = FontAsset("Result");
 	m_pFont->SetSize(50);
 
@@ -37,7 +36,7 @@ void CResult::Render(void) const
 {
 	m_BackRender.Render();
 
-	RenderBackBoard(Vector2(SceneWidth * 0.5f - 250, SceneHeight * 0.5f), Vector2(5.0f, 4.0f));
+	CBackRender::RenderBackBoard(Vector2(SceneWidth * 0.5f - 250, SceneHeight * 0.5f), Vector2(5.0f, 4.0f), MOF_ALPHA_WHITE(64));
 
 	m_pFont->RenderFormatString(50,  10, g_MusicData[g_MusicSelect].title.c_str());
 	m_pFont->RenderFormatString(50, 100, "PERFECT" ); m_pFont->RenderFormatString(400, 100, "%05dx", g_PlayResult.perfect);
@@ -56,22 +55,4 @@ void CResult::Render(void) const
 	m_pFont->RenderFormatString(50, 550, "HISCORE" ); m_pFont->RenderFormatString(300, 550, "%010d", hiScore);
 
 	m_BackBtn.Render();
-}
-
-void CResult::RenderBackBoard(const Vector2& centerPos, const Vector2& scale) const
-{
-	g_pGraphics->SetStencilEnable(TRUE);
-	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_ALWAYS, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR, StencilOp::STENCIL_INCR);
-
-	g_pGraphics->SetColorWriteEnable(FALSE);
-	m_pTexture->RenderScale(centerPos.x, centerPos.y, scale.x, scale.y, TEXALIGN_CENTERCENTER);
-	g_pGraphics->SetColorWriteEnable(TRUE);
-
-	g_pGraphics->SetStencilControl(ComparisonFunc::COMPARISON_LESS, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP, StencilOp::STENCIL_KEEP);
-
-	Vector2 texSize(m_pTexture->GetWidth() * scale.x, m_pTexture->GetHeight() * scale.y);
-	CRectangle rect(centerPos.x - texSize.x, centerPos.y - texSize.y, centerPos.x + texSize.x, centerPos.y + texSize.y);
-	CGraphicsUtilities::RenderFillRect(rect, MOF_ALPHA_WHITE(64));
-
-	g_pGraphics->SetStencilEnable(FALSE);
 }
