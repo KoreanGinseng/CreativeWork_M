@@ -37,6 +37,8 @@ public:
 
 	virtual void Render(void) const override;
 
+	int CulcOffsetKeyPosX(const MofU8& key) const;
+
 	static void Save(void);
 
 	static bool Load(void);

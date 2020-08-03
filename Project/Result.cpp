@@ -5,7 +5,7 @@ CResult::CResult(const CResult::InitData & init) :
 {
 	SoundAsset("BGM_Result")->SetLoop(TRUE);
 	SoundAsset("BGM_Result")->Play();
-	SoundAsset("BGM_Result")->SetVolume(0.3f);
+	SoundAsset("BGM_Result")->SetVolume(0.05f);
 
 	m_pFont    = FontAsset("Result");
 	m_pFont->SetSize(50);

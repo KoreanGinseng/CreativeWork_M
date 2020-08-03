@@ -150,6 +150,10 @@ bool StartLoad(void)
 		return false;
 	}
 
+	// SE‚Ì‰¹—Ê’²ßB
+	SoundAsset("SE_Select")->SetVolume(0.05f);
+	SoundAsset("SE_Enter") ->SetVolume(0.05f);
+
 	//Sleep(10000);
 
 	return true;

@@ -11,7 +11,7 @@ CTitle::CTitle(const CTitle::InitData & init) :
 
 	SoundAsset("BGM_Title")->SetLoop(TRUE);
 	SoundAsset("BGM_Title")->Play();
-	SoundAsset("BGM_Title")->SetVolume(0.3f);
+	SoundAsset("BGM_Title")->SetVolume(0.05f);
 
 	for (int i = 0; i < 30; i++)
 	{

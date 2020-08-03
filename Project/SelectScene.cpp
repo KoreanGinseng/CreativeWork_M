@@ -20,10 +20,10 @@ CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 	m_SelectBtnUp      = CButton(CRectangle(            530,              30,             580,               80));
 	m_SelectBtnDown    = CButton(CRectangle(            530,SceneHeight - 80,             580, SceneHeight - 30));
 	m_SetBtn           = CButton(CRectangle(SceneWidth - 80,              30, SceneWidth - 30,               80));
-	m_SelectBtnLeft_1  = CButton(CRectangle(   927 + 50 + 5,             400,        982 + 50,         400 + 31));
-	m_SelectBtnLeft_2  = CButton(CRectangle(            927,             400,        927 + 50,         400 + 31));
-	m_SelectBtnRight_1 = CButton(CRectangle(           1130,             400,       1130 + 50,         400 + 31));
-	m_SelectBtnRight_2 = CButton(CRectangle(  1130 + 50 + 5,             400,       1185 + 50,         400 + 31));
+	m_SelectBtnLeft_1  = CButton(CRectangle(   927 + 50 + 5,             340,        982 + 50,         340 + 31));
+	m_SelectBtnLeft_2  = CButton(CRectangle(            927,             340,        927 + 50,         340 + 31));
+	m_SelectBtnRight_1 = CButton(CRectangle(           1130,             340,       1130 + 50,         340 + 31));
+	m_SelectBtnRight_2 = CButton(CRectangle(  1130 + 50 + 5,             340,       1185 + 50,         340 + 31));
 	
 	m_SelectBtnUp     .SetTexture(TextureAsset("ArrowUp"));
 	m_SelectBtnDown   .SetTexture(TextureAsset("ArrowDown"));
@@ -47,7 +47,7 @@ CSelectScene::CSelectScene(const CSelectScene::InitData & init) :
 
 	SoundAsset("BGM_Select")->SetLoop(TRUE);
 	SoundAsset("BGM_Select")->Play();
-	SoundAsset("BGM_Select")->SetVolume(0.1f);
+	SoundAsset("BGM_Select")->SetVolume(0.05f);
 }
 
 CSelectScene::~CSelectScene(void)
@@ -232,8 +232,10 @@ void CSelectScene::Render(void) const
 	const ScoreKey& scoreKey = ScoreKey(g_MusicData[g_MusicSelect].title.c_str(), truckNo);
 	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 6, "HiScore   : %d", CScoreManager::GetScoreValue(scoreKey));
 	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 5, "MaxCombo  : %d", CScoreManager::GetScore(scoreKey).GetMaxCombo());
-	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "TrackNo   : ");
-	m_pInfoFont->RenderFormatString(m_SelectBtnLeft_1.GetRect().Right + 30, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "%02u", truckNo);
+	//m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 4, "Instrument: %s", InstrumentNameStr[g_MusicData[g_MusicSelect].instruments[m_TruckIndex]]);
+	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 3, "Instrument: %d", g_MusicData[g_MusicSelect].instruments[m_TruckIndex]);
+	m_pInfoFont->RenderFormatString(offsetX, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 4, "TrackNo   : ");
+	m_pInfoFont->RenderFormatString(m_SelectBtnLeft_1.GetRect().Right + 30, infoRect.Bottom - (30 + titleNameRect.GetHeight()) * 4, "%02u", truckNo);
 	
 	// トラックが存在するか確認する。
 	if (truckNo >= truckCnt)

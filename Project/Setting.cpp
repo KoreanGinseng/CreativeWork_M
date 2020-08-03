@@ -137,11 +137,23 @@ void CSetting::Render(void) const
 	// 黒鍵の描画。
 	CGame::RenderBlackKey();
 
+	float offsetx1 = CulcOffsetKeyPosX(GetData().offsetKey);
+	float offsetx2 = CulcOffsetKeyPosX(GetData().offsetKey + GetData().keyLength - 1);
+	float offsety1 = CMIDIInput::IsBlackKey(GetData().offsetKey                          ) ? 670 : 710;
+	float offsety2 = CMIDIInput::IsBlackKey(GetData().offsetKey + GetData().keyLength - 1) ? 670 : 710;
+	CCircle redc (Vector2(PianoRollOffsetX + offsetx1, offsety1), 5);
+	CCircle bluec(Vector2(PianoRollOffsetX + offsetx2, offsety2), 5);
+	CGraphicsUtilities::RenderFillCircle(redc , MOF_COLOR_RED );
+	CGraphicsUtilities::RenderFillCircle(bluec, MOF_COLOR_BLUE);
+}
+
+int CSetting::CulcOffsetKeyPosX(const MofU8 & key) const
+{
 	float offsetx = 0;
-	if (CMIDIInput::IsBlackKey(GetData().offsetKey))
+	if (CMIDIInput::IsBlackKey(key))
 	{
 		// 黒鍵の場合のずらす処理。
-		if (GetData().offsetKey == PianoKey::A0_S)
+		if (key == PianoKey::A0_S)
 		{
 			offsetx = PianoWhiteKeyWidth - PianoBlackKeyWidth * 0.5f;
 		}
@@ -149,7 +161,7 @@ void CSetting::Render(void) const
 		{
 			// 黒鍵の数だけカウントする。
 			int x = -1;
-			for (int i = PianoKey::A0; i < GetData().offsetKey; i++)
+			for (int i = PianoKey::A0; i < key; i++)
 			{
 				if (CMIDIInput::IsWhiteKey(i))
 				{
@@ -177,7 +189,7 @@ void CSetting::Render(void) const
 	else
 	{
 		int x = 0;
-		for (int i = PianoKey::A0; i < GetData().offsetKey; i++)
+		for (int i = PianoKey::A0; i < key; i++)
 		{
 			if (CMIDIInput::IsBlackKey(i))
 			{
@@ -185,12 +197,11 @@ void CSetting::Render(void) const
 			}
 			x++;
 		}
-		offsetx  = x * PianoWhiteKeyWidth;
+		offsetx = x * PianoWhiteKeyWidth;
 		offsetx += PianoWhiteKeyWidth / 2;
 	}
-	float offsety = CMIDIInput::IsBlackKey(GetData().offsetKey) ? 670 : 710;
-	CCircle redc(Vector2(PianoRollOffsetX + offsetx, offsety), 5);
-	CGraphicsUtilities::RenderFillCircle(redc, MOF_COLOR_RED);
+
+	return offsetx;
 }
 
 void CSetting::Save(void)
