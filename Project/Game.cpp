@@ -169,9 +169,14 @@ void CGame::Render(void) const
 		? "GREAT"
 		: "PERFECT";
 
+	float scale   = (1.0f - (m_ComboMotion.GetValue() / 15.0f));
 	m_pFont->CalculateStringRect(0, 0, hitstr.c_str(), comboRect);
-	m_pFont->RenderFormatString(
-		SceneWidth - comboRect.Right - 30, 60 + comboRect.Bottom + 10, MOF_ALPHA_WHITE(196), "%s",
+	float resultX = SceneWidth - comboRect.GetWidth() - 30;
+	float resultY = 60 + comboRect.Bottom + 10;
+
+	m_pFont->RenderStringScale(
+		resultX - (comboRect.GetWidth() * scale - comboRect.GetWidth()) * 0.5f, resultY, scale,
+		MOF_ALPHA_WHITE(196),
 		hitstr.c_str()
 	);
 
