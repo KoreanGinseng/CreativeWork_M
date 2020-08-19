@@ -131,6 +131,7 @@
     <ClInclude Include="MIDIOut.h" />
     <ClInclude Include="Note.h" />
     <ClInclude Include="picojson.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Score.h" />
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

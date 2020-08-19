@@ -1,4 +1,5 @@
 #include	"GameApp.h"
+#include    "resource.h"
 
 int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow )
 {
@@ -6,6 +7,9 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
 
 	Mof::LPFramework pFrame = new Mof::CDX11GameFramework(); 
 	Mof::WINDOWSGAMEFRAMEWORKINITIALIZEINFO Info;
+
+	Info.WindowCreateInfo.hIcon  = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	Info.WindowCreateInfo.Title  = "M";
 
 	Info.WindowCreateInfo.Width  = 1280;
 	Info.WindowCreateInfo.Height =  720;
