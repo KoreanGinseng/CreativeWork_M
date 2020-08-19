@@ -169,6 +169,7 @@ void CGame::Render(void) const
 		? "GREAT"
 		: "PERFECT";
 
+	// ヒットリザルトのアニメーション用計算。
 	float scale   = (1.0f - (m_ComboMotion.GetValue() / 15.0f));
 	m_pFont->CalculateStringRect(0, 0, hitstr.c_str(), comboRect);
 	float resultX = SceneWidth - comboRect.GetWidth() - 30;
