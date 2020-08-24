@@ -1,34 +1,53 @@
 {
   "file_list": [
     {
-      "title": "TrackCheckMusic",
-      "file_name": "music/beeth_sym5-1.mid",
+      "title": "lostone",
+      "file_name": "music/lostone_uta.mid",
       "fall_speed": 9.0,
-      "trucks": [ 1, 2, 3, 4 ]
+      "trucks": [ 0, 1 ],
+      "instruments": [ 22, 73 ]
     },
     {
       "title": "Toruko",
       "file_name": "music/toruko.mid",
       "fall_speed": 7.0,
-      "trucks": [ 2 ]
+      "trucks": [ 2 ],
+      "instruments": [ 0 ]
     },
     {
       "title": "SenToChihiro",
       "file_name": "music/sentochihiro.mid",
       "fall_speed": 1.0,
-      "trucks": [ 4 ]
+      "trucks": [ 4 ],
+      "instruments": [ 124 ]
     },
     {
       "title": "noname2",
       "file_name": "music/noname2.mid",
       "fall_speed": 5.0,
-      "trucks": [ 1, 2, 3, 4 ]
+      "trucks": [ 1, 2, 3, 4 ],
+      "instruments": [ 12, 24, 36, 45 ]
     },
     {
       "title": "noname5",
       "file_name": "music/noname5.mid",
       "fall_speed": 7.0,
-      "trucks": [ 1, 2, 3, 4 ]
+      "trucks": [ 1, 2, 3, 4 ],
+      "instruments": [ 12, 24, 36, 45 ]
+    },
+    {
+      "title": "What_928",
+      "file_name": "music/What_928.mid",
+      "fall_speed": 7.0,
+      "trucks": [ 0 ],
+      "instruments": [ 45 ]
+    },
+    {
+      "title": "PkmRB-Bike",
+      "file_name": "music/PkmRB-Bike.mid",
+      "fall_speed": 7.0,
+      "trucks": [ 0, 1, 2, 3, 4 ],
+      "instruments": [ 12, 24, 36, 45, 56 ]
     }
   ]
 }
