@@ -50,10 +50,10 @@ CGame::CGame(const CGame::InitData & init) :
 	}
 	
 	// DEBUG : ノーツが落ちてくる秒数をデバッグプリントする。(確認用)
-	for (int i = 0; i < pNoteArray->GetNoteArray().GetArrayCount(); i++)
-	{
-		MOF_PRINTLOG("%d\n", pNoteArray->GetNoteArray()[i].GetStartTime());
-	}
+	//for (int i = 0; i < pNoteArray->GetNoteArray().GetArrayCount(); i++)
+	//{
+	//	MOF_PRINTLOG("%d\n", pNoteArray->GetNoteArray()[i].GetStartTime());
+	//}
 
 	// 演奏するスコアの登録。
 	m_ScoreKey = std::pair<std::string, int>(pMusicData->title.c_str(), GetData().trackNo);
@@ -83,11 +83,6 @@ void CGame::Update(void)
 
 	int prevCombo = g_PlayResult.combo;
 
-	// 2キーでタイトルへ戻る。
-	if (g_pInput->IsKeyPush(MOFKEY_2))
-	{
-		ChangeScene(SceneName::Title);
-	}
 	// 終わったらリザルトへ。
 	if (m_StartTime.GetTime() > m_EndTime)
 	{
