@@ -1,7 +1,7 @@
 #pragma once
+#include <MofSip.h>
 #include "MIDIInput.h"
 #include "MIDIOut.h"
-#include "StopWatch.h"
 #include "SMFData.h"
 #include "Score.h"
 
@@ -19,6 +19,7 @@ namespace sip
 
 	enum KeyLength
 	{
+		_20 = 20,
 		_25 = 25,
 		_37 = 37,
 		_49 = 49,
@@ -110,13 +111,13 @@ namespace sip
 
 		void Start(const float& spd);
 
-		void Update(const float& spd, const float& nowTime);
+		void Update(const float& spd, const float& nowTime, const MofU8& offset);
 
 		void Render(void) const;
 
 		void AutoPlay(void);
 
-		void CheckCollision(const float& nowTime);
+		void CheckCollision(const float& nowTime, const MofU8& offset);
 
 		void SetShow(const bool& b);
 
@@ -184,7 +185,7 @@ namespace sip
 
 		void Initialize(const int& trackNo, CScore* pScore);
 
-		void Update(void);
+		void Update(const MofU8& offset);
 
 		void Render(void) const;
 

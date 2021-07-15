@@ -1,6 +1,7 @@
 #pragma once
 #include "Mof.h"
 #include <unordered_map>
+#include <map>
 
 class CScore
 {

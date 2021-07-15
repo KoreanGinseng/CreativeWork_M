@@ -1,6 +1,13 @@
 {
   "file_list": [
     {
+      "title": " charamela",
+      "file_name": "music/noname5.mid",
+      "fall_speed": 7.0,
+      "trucks": [ 1, 2, 3, 4 ],
+      "instruments": [ 12, 24, 36, 45 ]
+    },
+    {
       "title": "lostone",
       "file_name": "music/lostone_uta.mid",
       "fall_speed": 9.0,
@@ -25,13 +32,6 @@
       "title": "noname2",
       "file_name": "music/noname2.mid",
       "fall_speed": 5.0,
-      "trucks": [ 1, 2, 3, 4 ],
-      "instruments": [ 12, 24, 36, 45 ]
-    },
-    {
-      "title": "noname5",
-      "file_name": "music/noname5.mid",
-      "fall_speed": 7.0,
       "trucks": [ 1, 2, 3, 4 ],
       "instruments": [ 12, 24, 36, 45 ]
     },

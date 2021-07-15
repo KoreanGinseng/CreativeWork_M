@@ -11,6 +11,7 @@
 #include	"GameApp.h"
 #include    "MIDIInput.h"
 #include    "picojson.h"
+#include    <fstream>
 
 
 CDynamicArray<MusicData> g_MusicData;
@@ -250,6 +251,19 @@ MofBool CGameApp::Update(void) {
 	//{
 	//	g_MidiOutput.Stop(PianoKey::A4, m_SceneManager.GetData()->channel);
 	//}
+
+	for (int i = 0; i < KeyboardPianoKey.size(); i++) 
+	{
+		auto pianoKey = i + (int)m_SceneManager.GetData()->offsetKey;
+		if (g_pInput->IsKeyPush(KeyboardPianoKey[i]))
+		{
+			g_MidiOutput.Play(0.8f, pianoKey, m_SceneManager.GetData()->channel);
+		}
+		if (g_pInput->IsKeyPull(KeyboardPianoKey[i]))
+		{
+			g_MidiOutput.Stop(pianoKey, m_SceneManager.GetData()->channel);
+		}
+	}
 
 	return TRUE;
 }

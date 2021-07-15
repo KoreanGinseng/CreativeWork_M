@@ -66,7 +66,7 @@ public:
 
 	virtual void Update(void) override;
 
-	virtual void Render(void) const override = 0;
+	virtual void Render(void) override = 0;
 
 	// “Ç‚İ‚İŠÖ”‚Ì“o˜^B
 	static void SetLoadFunc(const std::string& key, const LoadFunction& func);

@@ -135,7 +135,7 @@ namespace sip
 		m_GoalTime = (CheckLineY / spd) + (m_NoteOnData.eventTime / 1000.0f);
 	}
 
-	void CNote::Update(const float& spd, const float& nowTime)
+	void CNote::Update(const float& spd, const float& nowTime, const MofU8& offset)
 	{
 		if (!m_bStart || !m_bShow)
 		{
@@ -152,7 +152,7 @@ namespace sip
 		// ”»’èB
 		if (!m_bCheck)
 		{
-			CheckCollision(nowTime);
+			CheckCollision(nowTime, offset);
 		}
 	}
 
@@ -187,7 +187,7 @@ namespace sip
 		}
 	}
 
-	void CNote::CheckCollision(const float& nowTime)
+	void CNote::CheckCollision(const float& nowTime, const MofU8& offset)
 	{
 		float checkTime = (m_GoalTime - nowTime);
 
@@ -216,6 +216,9 @@ namespace sip
 
 		checkTime = MOF_ABS(checkTime);
 		
+		int index = (MofU8)m_NoteOnData.laneIndex - offset;
+		MofU8 keyboard = KeyboardPianoKey[MOF_CLIPING(index, 0, KeyboardPianoKey.size() - 1)];
+
 		// ”»’è‚·‚éB
 		if (m_bAuto)
 		{
@@ -230,7 +233,7 @@ namespace sip
 				m_bCheck = true;
 			}
 		}
-		else if (g_MIDIInput.IsKeyPush((MofU8)m_NoteOnData.laneIndex))
+		else if (g_MIDIInput.IsKeyPush((MofU8)m_NoteOnData.laneIndex) || g_pInput->IsKeyPush(keyboard))
 		{
 			if (checkTime <= PerfectTime / 2.0f)
 			{
@@ -423,7 +426,7 @@ namespace sip
 		m_StopWatch.Start();
 	}
 
-	void CNoteArray::Update(void)
+	void CNoteArray::Update(const MofU8& offset)
 	{
 		m_StopWatch.Update();
 
@@ -445,7 +448,7 @@ namespace sip
 			{
 				m_NoteArray[i].Start(GetFallSpeed());
 			}
-			m_NoteArray[i].Update(GetFallSpeed(), m_StopWatch.GetTime());
+			m_NoteArray[i].Update(GetFallSpeed(), m_StopWatch.GetTime(), offset);
 		}
 
 		// Ž©“®‰‰‘t‘g
@@ -457,7 +460,7 @@ namespace sip
 				{
 					m_AutoNoteArray[i].GetData(j).Start(GetFallSpeed());
 				}
-				m_AutoNoteArray[i].GetData(j).Update(GetFallSpeed(), m_StopWatch.GetTime());
+				m_AutoNoteArray[i].GetData(j).Update(GetFallSpeed(), m_StopWatch.GetTime(), offset);
 			}
 		}
 	}

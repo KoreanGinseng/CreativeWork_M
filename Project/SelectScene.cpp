@@ -182,7 +182,7 @@ void CSelectScene::Update(void)
 	m_TruckIndex  = MOF_CLIPING(m_TruckIndex , 0, g_MusicData[g_MusicSelect].trucks.size() - 1);
 }
 
-void CSelectScene::Render(void) const
+void CSelectScene::Render(void)
 {
 	m_BackRender.Render();
 

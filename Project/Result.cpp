@@ -32,7 +32,7 @@ void CResult::Update(void)
 	m_BackRender.Update();
 }
 
-void CResult::Render(void) const
+void CResult::Render(void)
 {
 	m_BackRender.Render();
 

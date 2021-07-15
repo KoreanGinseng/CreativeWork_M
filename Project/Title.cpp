@@ -88,7 +88,7 @@ void CTitle::Update(void)
 	m_Rotate = MOF_NORMALIZE_RADIANANGLE(m_Rotate);
 }
 
-void CTitle::Render(void) const
+void CTitle::Render(void)
 {
 	for (int i = 0; i < 30; i++)
 	{

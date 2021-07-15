@@ -8,8 +8,8 @@ CLoad::CLoad(const CLoad::InitData & init) :
 	m_pFont = FontAsset("Info");
 	m_pFont->SetSize(60);
 
-	m_AlphaMotion << CEaseMotion<int>(255,   0, Ease::In, EaseType::None, 0.5f);
-	m_AlphaMotion << CEaseMotion<int>(  0, 255, Ease::In, EaseType::None, 0.5f);
+	m_AlphaMotion << CEaseMotion<int>(255,   0, Ease::In, EaseType::Linear, 0.5f);
+	m_AlphaMotion << CEaseMotion<int>(  0, 255, Ease::In, EaseType::Linear, 0.5f);
 
 	m_AlphaMotion.Start();
 }
@@ -38,7 +38,7 @@ void CLoad::Update(void)
 	CLoadBase::Update();
 }
 
-void CLoad::Render(void) const
+void CLoad::Render(void)
 {
 	g_pGraphics->ClearTarget(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0);
 

@@ -103,7 +103,7 @@ void CGame::Update(void)
 	}
 
 	// ノーツの更新。
-	g_NoteArray[g_MusicSelect].Update();
+	g_NoteArray[g_MusicSelect].Update(GetData().offsetKey);
 
 	// コンボのモーションを再生する。
 	if (prevCombo != g_PlayResult.combo)
@@ -115,7 +115,7 @@ void CGame::Update(void)
 	m_ComboMotion.Update();
 }
 
-void CGame::Render(void) const
+void CGame::Render(void)
 {
 	// 譜面の縦の線のやつ。
 	RenderKeyLine();

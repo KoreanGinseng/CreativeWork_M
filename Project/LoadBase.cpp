@@ -38,7 +38,7 @@ void CLoadBase::Update(void)
 	ChangeScene(m_NextKey);
 }
 
-void CLoadBase::Render(void) const
+void CLoadBase::Render(void)
 {
 }
 

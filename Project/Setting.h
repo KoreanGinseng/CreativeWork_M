@@ -35,7 +35,7 @@ public:
 
 	virtual void Update(void) override;
 
-	virtual void Render(void) const override;
+	virtual void Render(void) override;
 
 	int CulcOffsetKeyPosX(const MofU8& key) const;
 

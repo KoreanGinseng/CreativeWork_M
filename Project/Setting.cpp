@@ -54,7 +54,9 @@ void CSetting::Update(void)
 	{
 		SoundAsset("SE_Select")->Play();
 		GetData().keyLength =
-			(GetData().keyLength == KeyLength::_25) || (GetData().keyLength == KeyLength::_37)
+			(GetData().keyLength == KeyLength::_20) || (GetData().keyLength == KeyLength::_25)
+			? KeyLength::_20
+			: GetData().keyLength == KeyLength::_37
 			? KeyLength::_25
 			: GetData().keyLength == KeyLength::_49
 			? KeyLength::_37
@@ -65,7 +67,7 @@ void CSetting::Update(void)
 	if (m_SelectLeft_1_2.IsPull())
 	{
 		SoundAsset("SE_Select")->Play();
-		GetData().keyLength = KeyLength::_25;
+		GetData().keyLength = KeyLength::_20;
 	}
 	if (m_SelectRight_1_1.IsPull())
 	{
@@ -77,7 +79,9 @@ void CSetting::Update(void)
 			? KeyLength::_61
 			: GetData().keyLength == KeyLength::_37
 			? KeyLength::_49
-			: KeyLength::_37;
+			: GetData().keyLength == KeyLength::_25
+			? KeyLength::_37
+			: KeyLength::_25;
 	}
 	if (m_SelectRight_1_2.IsPull())
 	{
@@ -108,7 +112,7 @@ void CSetting::Update(void)
 	}
 }
 
-void CSetting::Render(void) const
+void CSetting::Render(void)
 {
 	m_BackRender.Render();
 

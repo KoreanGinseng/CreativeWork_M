@@ -1,8 +1,6 @@
 #pragma once
-#include "SceneManager.h"
-#include "AssetBase.h"
+#include <MofSip.h>
 #include "Note.h"
-#include "EaseMotionController.h"
 
 using namespace sip;
 
@@ -120,6 +118,30 @@ constexpr std::pair<char*, char*> TextureData[] =
 	std::pair<char*, char*>("ArrowRight_2", "img/ArrowRight_2.png"),
 };
 
+const std::vector<MofU8> KeyboardPianoKey =
+{
+	MOFKEY_A,
+	MOFKEY_W,
+	MOFKEY_S,
+	MOFKEY_E,
+	MOFKEY_D,
+	MOFKEY_F,
+	MOFKEY_T,
+	MOFKEY_G,
+	MOFKEY_Y,
+	MOFKEY_H,
+	MOFKEY_U,
+	MOFKEY_J,
+	MOFKEY_K,
+	MOFKEY_O,
+	MOFKEY_L,
+	MOFKEY_P,
+	MOFKEY_SEMICOLON,
+	MOFKEY_COLON,
+	MOFKEY_LBRACKET,
+	MOFKEY_RBRACKET,
+};
+
 
 extern    CDynamicArray<CNoteArray>  g_NoteArray;
 extern    CDynamicArray<MusicData>   g_MusicData;
@@ -149,3 +171,14 @@ constexpr int    CheckLineY            =                                    Pian
 constexpr double Version               =                                                      0.1;
 
 using MyApp = CSceneManager<SceneName, GameData>;
+
+
+typedef CAssetBase<std::string, CSoundBuffer>   CSoundAsset;
+typedef CAssetBase<std::string, CTexture>       CTextureAsset;
+typedef CAssetBase<std::string, CMeshContainer> CMeshAsset;
+typedef CAssetBase<std::string, CFontA>         CFontAsset;
+
+#define SoundAsset(key)            CSoundAsset::GetAsset(key)
+#define TextureAsset(key)          CTextureAsset::GetAsset(key)
+#define MeshAsset(key)             CMeshAsset::GetAsset(key)
+#define FontAsset(key)             CFontAsset::GetAsset(key)
